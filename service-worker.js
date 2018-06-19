@@ -1,4 +1,4 @@
-var CACHE_NAME = 'rope-cache-5'
+var CACHE_NAME = 'rope-cache-6'
 var filesToCache = [
     '/',
     'index.html',
