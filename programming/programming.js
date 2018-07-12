@@ -114,7 +114,7 @@ class BlocksView {
         let movingPiece = this.getOrCreatePiece(e)
         movingPiece.setElm($(e.target))
         this.moveSnapedPieceIfIsTimeToSnap(movingPiece)
-        this.markThatThePieceEnteredPlaceholdersArea(movingPiece)
+        this.setPieceEnteredPlaceholdersArea(movingPiece)
         this.changePieceColorIfOutside(movingPiece)
     }
 
@@ -131,7 +131,7 @@ class BlocksView {
         this.notifyChangedPieces()
     }
 
-    markThatThePieceEnteredPlaceholdersArea(movingPiece) {
+    setPieceEnteredPlaceholdersArea(movingPiece) {
         const placeholdersRectangle = this.getPlaceholdersRectangle()
         if (placeholdersRectangle.contains(movingPiece.center())) {
             movingPiece.enteredPlaceholdersArea = true

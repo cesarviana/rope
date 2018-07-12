@@ -62,7 +62,8 @@ $(function () {
         // If debug is active and execution started, must listen clicks on
         // next piece
         if (app.debug && app.started) {
-            if (app.executedIndex + 1 != index) {
+            const notClickedOnNextIndex = app.executedIndex + 1 != index
+            if (notClickedOnNextIndex) {
                 app.sounds.error.play()
             } else {
                 app.sounds.next.play()

@@ -9,11 +9,11 @@ const bluetooth = {
 bluetooth.search = () => {
     let serviceUuid = '0000ffe0-0000-1000-8000-00805f9b34fb'
     let characteristicUuid = '0000ffe1-0000-1000-8000-00805f9b34fb'
-    let options = {
-        acceptAllDevices: true,
-        optionalServices: [serviceUuid]
-    }
-    navigator.bluetooth.requestDevice(options)
+    navigator.bluetooth.requestDevice({
+        filters: [{
+            name: "-['.']- RoPE"
+        }]
+    })
         .then(device => {
             bluetooth.device = device
             bluetooth.device.addEventListener('gattserverdisconnected', bluetooth.onDisconnected)
