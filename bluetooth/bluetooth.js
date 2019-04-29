@@ -1,4 +1,4 @@
-/* global navigator TextEncoder $ */
+/* global navigator TextEncoder TextDecoder $ */
 
 const bluetooth = {
     eventHandlers: {},
@@ -6,17 +6,20 @@ const bluetooth = {
     decoder: new TextDecoder('utf-8')
 }
 
+const TAMANHO_MAXIMO_VALUE = 20
+
 bluetooth.search = () => {
     let serviceUuid = '0000ffe0-0000-1000-8000-00805f9b34fb'
     let characteristicUuid = '0000ffe1-0000-1000-8000-00805f9b34fb'
     navigator.bluetooth.requestDevice({
-        filters: [{
+        filters : [{
             name: "-['.']- RoPE"
-        }]
+        }],
+        optionalServices: [serviceUuid]
     })
         .then(device => {
             bluetooth.device = device
-            bluetooth.device.addEventListener('gattserverdisconnected', bluetooth.onDisconnected)
+            device.addEventListener('gattserverdisconnected', onDisconnected)
             return device.gatt.connect()
         })
         .then(server => {
@@ -31,10 +34,7 @@ bluetooth.search = () => {
             .then(_=>{
                 log("Notificações iniciadas")
                 
-                characteristic.oncharacteristicvaluechanged = (event) => {
-                    const value = bluetooth.decoder.decode( event.target.value ).trim()
-                    bluetooth.notify('characteristic-changed', value)
-                }  
+                characteristic.addEventListener('characteristicvaluechanged', characteristicChanged)
                 
                 bluetooth.characteristic = characteristic
                 bluetooth.notify('connected', bluetooth.characteristic)
@@ -45,6 +45,16 @@ bluetooth.search = () => {
             bluetooth.notify('connection-failed', {})
             log('Argh! ' + error)
         })
+}
+
+function characteristicChanged(event) {
+    const value = bluetooth.decoder.decode( event.target.value ).trim()
+    log(`RoPE diz - ${value}` );
+    bluetooth.notify('characteristic-changed', value)
+}
+
+function onDisconnected() {
+    bluetooth.notify('connection-failed')
 }
 
 bluetooth.on = (event, handler) => {
@@ -64,18 +74,16 @@ bluetooth.notify = (event, result) => {
 }
 
 bluetooth.setCharacteristic = (value) => {
-    log('Setting Characteristic User Description...')
-    bluetooth.characteristic.writeValue(bluetooth.encoder.encode(value+'&'))
-        .then(_ => {
-            log('> Characteristic User Description changed to: ' + value)
-        })
-        .catch(error => {
-            log('Argh! ' + error)
-        })
-}
-
-bluetooth.onDisconnected = () => {
-    bluetooth.notify('connection_failed')
+    const chunks = value.match(/.{1,20}/g)
+    chunks.forEach(chunk=>{
+        log(`Tela diz - ${chunk}` );
+        bluetooth.characteristic.writeValue(bluetooth.encoder.encode(chunk))
+            .then(_ => {
+            })
+            .catch(error => {
+            })    
+    })
+    
 }
 
 const log = function (text) {
