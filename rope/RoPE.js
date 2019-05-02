@@ -37,6 +37,7 @@ class RoPE {
 
     async sendInstructions(instructionsString) 
     {
+        alert(instructionsString);
         this.instructions.push(instructionsString)
         this._startCommunication()
     }
