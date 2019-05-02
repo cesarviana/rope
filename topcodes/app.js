@@ -44,10 +44,12 @@ startButton.addEventListener('click', async function(){
     );
     bluetooth.on('connected', async function()
     {
-        await bluetooth.setCharacteristic('Hi');
-        await bluetooth.setCharacteristic('f');
-        await bluetooth.setCharacteristic('Hi');
-        await bluetooth.setCharacteristic('e');
+        setInterval(async function(){
+            await bluetooth.setCharacteristic('Hi');
+            await bluetooth.setCharacteristic('f');
+            await bluetooth.setCharacteristic('Hi');
+            await bluetooth.setCharacteristic('e');
+        }, 2000)
     })
     
     // const rope = new RoPE();
