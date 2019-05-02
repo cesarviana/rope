@@ -1,22 +1,8 @@
-/*global $ global bluetooth navigator BlocksView */
+/*global $ global rope navigator BlocksView */
 $(function () {
 
-    const dictionaryCharToAction = {
-        f: 'advance', // frente
-        t: 'back', // tras 
-        e: 'left', // esquerda
-        d: 'right' // direita
-    }
-    
-    const dictionaryActionToChar = {
-        advance : 'f', // frente
-        back : 't', // tras 
-        left : 'e', // esquerda
-        right: 'd' // direita
-    }
-
     const app = {
-        bluetooth: bluetooth,
+        rope: new RoPE(),
         blocks: new BlocksView(),
         sounds: {
             start: new Audio('assets/startsound.wav'),
@@ -49,7 +35,7 @@ $(function () {
         if(app.blockGoClick) 
             return
         
-        app.bluetooth.setCharacteristic('<i>') // iniciar
+        app.rope.execute()
         app.blockGoClick = true
         $('#go-block').addClass('disabled')
         setTimeout(_=>{
@@ -58,10 +44,10 @@ $(function () {
         }, 1000)
     })
 
-    app.bluetooth.on('connected', () => {
+    app.rope.onConnected(() => {
         app.showProgrammingView()
         app.setConnected(true)
-        app.bluetooth.setCharacteristic('<l>');
+        app.rope.clear();
         clearInterval('changeSleepingImage')
         app.resetProgrammingView()
         app.debug = false
@@ -69,16 +55,14 @@ $(function () {
         app.pointPieceToExecute()
     })
 
-    app.bluetooth.on('connection-failed', () => {
+    app.rope.onConnectionFailed(() => {
         app.showMagnifying(false)
         app.setConnected(false)
         app.showSleepingRoPE()
         app.showConnectionView()
     })
 
-    app.bluetooth.on('characteristic-changed', (characteristic) => {
-        app.handleChangeOn(characteristic)
-    })
+    app.rope.onMessage(app.handleMessage)
 
     app.blocks.on('changed', (pieces) => {
         app.setPiecesCharacteristic(pieces)
@@ -93,7 +77,8 @@ $(function () {
                 app.sounds.error.play()
             } else {
                 app.sounds.next.play()
-                app.bluetooth.setCharacteristic('<n>')
+                // TODO
+                // app.rope.executeNextInstruction()
             }
         }
     })
@@ -207,7 +192,7 @@ $(function () {
     // Methods to dealing with the model
 
     app.startSearch = () => {
-        app.bluetooth.search()
+        app.rope.search()
         app.showMagnifying(true)
         app.showConnectionView()
     }
@@ -229,7 +214,7 @@ $(function () {
         }
     }
 
-    app.handleChangeOn = (characteristic) => {
+    app.handleMessage = (characteristic) => {
         
         if(characteristic.indexOf("debug") != -1) // debugging firmware
             return
@@ -300,24 +285,22 @@ $(function () {
         const commands = []
         for (let i = 0; i < commandsStr.length; i++) {
             const char = commandsStr.charAt(i)
-            let command = dictionaryCharToAction[char]
-            if(command)
-                commands.push(command)
+            commands.push(char)
         }
         return commands
     }
 
     app.toggleDebug = () => {
-        app.bluetooth.setCharacteristic('<d:' + (app.debug ? 0 : 1) + '>')
+        // TODO
+        //app.rope.setCharacteristic('<d:' + (app.debug ? 0 : 1) + '>')
     }
 
     app.setPiecesCharacteristic = (pieces) => {
-        let comandos = ''
+        let commands = ''
         pieces.forEach(piece => {
-            const command = piece.$elm.attr('data-command')
-            comandos += dictionaryActionToChar[command]
+            commands += piece.$elm.attr('data-command')
         })
-        app.bluetooth.setCharacteristic('<cmds:'+comandos+'>')
+        app.rope.sendInstructions(commands)
     }
 
     // Start

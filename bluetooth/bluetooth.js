@@ -1,5 +1,7 @@
 /* global navigator TextEncoder TextDecoder $ */
 
+// TODO convert to class
+
 const bluetooth = {
     eventHandlers: {},
     encoder: new TextEncoder('utf-8'),
