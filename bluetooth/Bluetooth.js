@@ -11,8 +11,8 @@ class Bluetooth
 
     async search(options)
     {
-        let serviceUuid = options.serviceUuid
-        let characteristicUuid = options.characteristicUuid
+        let serviceUuid = options.serviceUuid;
+        let characteristicUuid = options.characteristicUuid;
         
         try 
         {
@@ -27,14 +27,15 @@ class Bluetooth
             let server = await this.device.gatt.connect();
             let service = await server.getPrimaryService(serviceUuid);
             this.characteristic = await service.getCharacteristic(characteristicUuid);
-            await this.characteristic.startNotifications()            
-            this.characteristic.addEventListener('characteristicvaluechanged', (event) => this._characteristicChanged(event))
-            this._notify('connected', this.characteristic)
+            alert('caracteristicas ok');
+            await this.characteristic.startNotifications();          
+            this.characteristic.addEventListener('characteristicvaluechanged', (event) => this._characteristicChanged(event));
+            this._notify('connected', this.characteristic);
         } 
         catch (error) 
         {
-            this._notify('connection-failed', {})
-            log('Argh! ' + error)
+            this._notify('connection-failed', {});
+            log('Argh! ' + error);
         }
     }
 
