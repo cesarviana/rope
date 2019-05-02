@@ -47,9 +47,10 @@ startButton.addEventListener('click', async function(){
         alert('conectado');
         setInterval(async function(){
             await bluetooth.setCharacteristic('Hi');
-            await bluetooth.setCharacteristic('f');
+            await bluetooth.setCharacteristic('cmds:f');
             await bluetooth.setCharacteristic('Hi');
-            await bluetooth.setCharacteristic('e');
+            await bluetooth.setCharacteristic('cmds:e');
+            alert('oi')
         }, 2000)
     })
     
