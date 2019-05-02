@@ -11,8 +11,8 @@ class RoPE {
         this.instructions = [];
     }
 
-    search() {
-        this.bluetooth.search();
+    async search() {
+        await this.bluetooth.search();
     }
 
     onConnected(callback){
