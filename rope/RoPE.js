@@ -24,7 +24,7 @@ class RoPE {
     }
 
     execute(){
-        this.bluetooth.setCharacteristic('e');
+        this.sendInstructions('e')
     }
 
     clear(){
