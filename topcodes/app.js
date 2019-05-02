@@ -11,6 +11,9 @@ class App {
     
     start()
     {
+        this.rope = new RoPE();
+        this.rope.search();
+
         this.camera = new Camera(TopCodes,'video-canvas');
         this.camera.start();
         
@@ -32,31 +35,6 @@ class App {
     }
 }
 
+const app = new App();
 let startButton = document.getElementById('startButton');
-startButton.addEventListener('click', async function(){
-    const bluetooth = new Bluetooth();
-
-    bluetooth.on('connected', async function()
-    {
-        alert('conectado');
-        setInterval(async function(){
-            await bluetooth.setCharacteristic('cmds:f');
-            await bluetooth.setCharacteristic('cmds:e');
-            alert('oi')
-        }, 2000)
-    })
-
-    await bluetooth.search(
-        {
-            serviceUuid: '0000ffe0-0000-1000-8000-00805f9b34fb',
-            characteristicUuid: '0000ffe1-0000-1000-8000-00805f9b34fb',
-            name: "-['.']- RoPE"
-        }
-    );
-    
-    
-    // const rope = new RoPE();
-    // rope.search();
-    // const app = new App();
-    // app.start();
-});
+startButton.addEventListener('click', app.start);
