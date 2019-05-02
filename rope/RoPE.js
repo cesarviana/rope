@@ -6,7 +6,7 @@
 class RoPE {
 
     constructor(){
-        this.bluetooth = bluetooth; // change to new Bluetooth()
+        this.bluetooth = new Bluetooth();
         this.bluetooth.on('characteristic-changed', this._handleBluetoothMessage)
         this.instructions = [];
     }
@@ -35,18 +35,29 @@ class RoPE {
         // this.bluetooth.on('characteristic-changed', callback)
     }
 
-    sendInstructions(instructionsString) {
+    async sendInstructions(instructionsString) 
+    {
         this.instructions.push(instructionsString)
         this._startCommunication()
     }
 
-    _startCommunication() {
+    async _startCommunication() 
+    {
+        if(!this.bluetooth.isConnected())
+        {
+            await this.bluetooth.search(
+            {
+                serviceUuid: '0000ffe0-0000-1000-8000-00805f9b34fb',
+                characteristicUuid: '0000ffe1-0000-1000-8000-00805f9b34fb',
+                name: "-['.']- RoPE"
+            })
+        }
         this.bluetooth.setCharacteristic('Hi!')
     }
 
     _handleBluetoothMessage(characteristic) {
-        console.log(characteristic)
-        if(characteristic === 'Command Accept'){
+        if(characteristic === 'Command Accept')
+        {
             this.bluetooth.setCharacteristic(this.instructions.pop())
         }
     }

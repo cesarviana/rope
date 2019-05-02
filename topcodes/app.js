@@ -8,17 +8,23 @@ class App {
             31: 'e'
         }
     }
-    start(){
+    
+    start()
+    {
         this.camera = new Camera(TopCodes,'video-canvas');
         this.camera.start();
         this.rope = new RoPE();
-        this.camera.onChangeCodes(topcodes=> this.onChangeCodes(topcodes));
+        this.camera.onChangeCodes(async (topcodes) => await this.onChangeCodes(topcodes));
     }
-    onChangeCodes(topcodes){
+
+    async onChangeCodes(topcodes)
+    {
         const instructions = topcodes
                         .sort((a,b)=> a.x > b.x ? 1 : -1)
-                        .map(topcode => this.codes[topcode.code] || '').reduce((a,b)=>a + b,'')
-        this.rope.sendInstructions(instructions.replace('e',''))
+                        .map(topcode => this.codes[topcode.code] || '')
+                        .reduce((a,b)=>a + b,'');
+        const instructionsWithoutExecute = instructions.replace('e','');
+        await this.rope.sendInstructions(instructionsWithoutExecute);
         if(instructions.includes('e'))
         {
             this.rope.execute()
