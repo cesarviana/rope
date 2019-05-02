@@ -14,21 +14,21 @@ class Bluetooth
         let serviceUuid = options.serviceUuid
         let characteristicUuid = options.characteristicUuid
         
-        this.device = await navigator.bluetooth.requestDevice({
-            filters : [{
-                name: options.name
-            }],
-            optionalServices: [serviceUuid]
-        })
-
         try 
         {
-            this.device.addEventListener('gattserverdisconnected', this._onDisconnected);
-            let server = await device.gatt.connect();
+            this.device = await navigator.bluetooth.requestDevice({
+                filters : [{
+                    name: options.name
+                }],
+                optionalServices: [serviceUuid]
+            })
+            
+            this.device.addEventListener('gattserverdisconnected', () => this._onDisconnected());
+            let server = await this.device.gatt.connect();
             let service = await server.getPrimaryService(serviceUuid);
             this.characteristic = await service.getCharacteristic(characteristicUuid);
             await this.characteristic.startNotifications()            
-            this.characteristic.addEventListener('characteristicvaluechanged', this._characteristicChanged)
+            this.characteristic.addEventListener('characteristicvaluechanged', (event) => this._characteristicChanged(event))
             this._notify('connected', this.characteristic)
         } catch (error) {
             this._notify('connection-failed', {})

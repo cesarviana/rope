@@ -12,7 +12,13 @@ class RoPE {
     }
 
     async search() {
-        await this.bluetooth.search();
+        await this.bluetooth.search(
+            {
+                serviceUuid: '0000ffe0-0000-1000-8000-00805f9b34fb',
+                characteristicUuid: '0000ffe1-0000-1000-8000-00805f9b34fb',
+                name: "-['.']- RoPE"
+            }
+        );
     }
 
     onConnected(callback){
@@ -37,23 +43,24 @@ class RoPE {
 
     async sendInstructions(instructionsString) 
     {
-        alert(instructionsString);
         this.instructions.push(instructionsString)
         this._startCommunication()
     }
 
     async _startCommunication() 
     {
-        if(!this.bluetooth.isConnected())
+        try
         {
-            await this.bluetooth.search(
+            if(!this.bluetooth.isConnected())
             {
-                serviceUuid: '0000ffe0-0000-1000-8000-00805f9b34fb',
-                characteristicUuid: '0000ffe1-0000-1000-8000-00805f9b34fb',
-                name: "-['.']- RoPE"
-            })
+                await this.search()
+            }
+            this.bluetooth.setCharacteristic('Hi!')   
+        } 
+        catch (error) 
+        {
+            console.log(JSON.stringify(error))    
         }
-        this.bluetooth.setCharacteristic('Hi!')
     }
 
     _handleBluetoothMessage(characteristic) {

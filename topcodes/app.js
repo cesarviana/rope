@@ -13,7 +13,7 @@ class App {
     {
         this.camera = new Camera(TopCodes,'video-canvas');
         this.camera.start();
-        this.rope = new RoPE();
+        
         this.camera.onChangeCodes(async (topcodes) => await this.onChangeCodes(topcodes));
     }
 
@@ -32,5 +32,26 @@ class App {
     }
 }
 
-const app = new App();
-app.start();
+let startButton = document.getElementById('startButton');
+startButton.addEventListener('click', async function(){
+    const bluetooth = new Bluetooth();
+    await bluetooth.search(
+        {
+            serviceUuid: '0000ffe0-0000-1000-8000-00805f9b34fb',
+            characteristicUuid: '0000ffe1-0000-1000-8000-00805f9b34fb',
+            name: "-['.']- RoPE"
+        }
+    );
+    bluetooth.on('connected', async function()
+    {
+        await bluetooth.setCharacteristic('Hi');
+        await bluetooth.setCharacteristic('f');
+        await bluetooth.setCharacteristic('Hi');
+        await bluetooth.setCharacteristic('e');
+    })
+    
+    // const rope = new RoPE();
+    // rope.search();
+    // const app = new App();
+    // app.start();
+});
