@@ -9,8 +9,13 @@ class App {
         }
     }
     
+    log(l){
+        document.getElementById('log').innerHTML += l
+    }
+
     start()
     {
+        this.log('starting..');
         this.rope = new RoPE();
         this.rope.search();
 
@@ -28,6 +33,7 @@ class App {
                         .reduce((a,b)=>a + b,'');
         const instructionsWithoutExecute = instructions.replace('e','');
         await this.rope.sendInstructions(instructionsWithoutExecute);
+        this.log(instructions)
         if(instructions.includes('e'))
         {
             this.rope.execute()
@@ -37,4 +43,4 @@ class App {
 
 const app = new App();
 let startButton = document.getElementById('startButton');
-startButton.addEventListener('click', app.start);
+startButton.addEventListener('click', () => app.start());
