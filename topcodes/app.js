@@ -35,6 +35,17 @@ class App {
 let startButton = document.getElementById('startButton');
 startButton.addEventListener('click', async function(){
     const bluetooth = new Bluetooth();
+
+    bluetooth.on('connected', async function()
+    {
+        alert('conectado');
+        setInterval(async function(){
+            await bluetooth.setCharacteristic('cmds:f');
+            await bluetooth.setCharacteristic('cmds:e');
+            alert('oi')
+        }, 2000)
+    })
+
     await bluetooth.search(
         {
             serviceUuid: '0000ffe0-0000-1000-8000-00805f9b34fb',
@@ -42,17 +53,7 @@ startButton.addEventListener('click', async function(){
             name: "-['.']- RoPE"
         }
     );
-    bluetooth.on('connected', async function()
-    {
-        alert('conectado');
-        setInterval(async function(){
-            await bluetooth.setCharacteristic('Hi');
-            await bluetooth.setCharacteristic('cmds:f');
-            await bluetooth.setCharacteristic('Hi');
-            await bluetooth.setCharacteristic('cmds:e');
-            alert('oi')
-        }, 2000)
-    })
+    
     
     // const rope = new RoPE();
     // rope.search();
