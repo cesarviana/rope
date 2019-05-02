@@ -22,7 +22,7 @@ class Bluetooth
                 }],
                 optionalServices: [serviceUuid]
             })
-            
+
             this.device.addEventListener('gattserverdisconnected', () => this._onDisconnected());
             let server = await this.device.gatt.connect();
             let service = await server.getPrimaryService(serviceUuid);
@@ -30,7 +30,9 @@ class Bluetooth
             await this.characteristic.startNotifications()            
             this.characteristic.addEventListener('characteristicvaluechanged', (event) => this._characteristicChanged(event))
             this._notify('connected', this.characteristic)
-        } catch (error) {
+        } 
+        catch (error) 
+        {
             this._notify('connection-failed', {})
             log('Argh! ' + error)
         }
