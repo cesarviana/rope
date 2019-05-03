@@ -21,7 +21,7 @@ export default class Bluetooth
                     name: options.name
                 }],
                 optionalServices: [serviceUuid]
-            })
+            });
 
             this.device.addEventListener('gattserverdisconnected', () => this._onDisconnected());
             let server = await this.device.gatt.connect();
@@ -33,14 +33,14 @@ export default class Bluetooth
         catch (error) 
         {
             this._notify('connection-failed', {});
-            log('Argh! ' + error);
+            this._log('Argh! ' + error);
         }
     }
 
     _characteristicChanged(event) {
         const value = this.decoder.decode( event.target.value ).trim();
-        log(`RoPE diz - ${value}` );
-        this.notify('characteristic-changed', value)
+        this._log(`RoPE diz - ${value}` );
+        this._notify('characteristic-changed', value)
     }
 
     _notify(event, result) {
@@ -59,7 +59,7 @@ export default class Bluetooth
     {
         const chunks = value.match(/.{1,20}/g);
         chunks.forEach(chunk=>{
-            log(`Tela diz - ${chunk}` );
+            this._log(`Tela diz - ${chunk}` );
             this.characteristic.writeValue(this.encoder.encode(chunk))
                 .then(_ => {})
                 .catch(error => {})    
@@ -81,5 +81,10 @@ export default class Bluetooth
     isConnected()
     {
         return this.characteristic !== undefined;
+    }
+
+    _log(text)
+    {
+        console.log(text);
     }
 }

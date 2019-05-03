@@ -37,7 +37,7 @@ class App {
         App.log(instructions);
         if(instructions.includes('e'))
         {
-            this.rope.execute()
+            await this.rope.execute()
         }
     }
 
@@ -53,6 +53,6 @@ startButton.addEventListener('click', async () => {
     try {
         await app.start();
     } catch (e) {
-        alert(e);
+        console.log(e);
     }
 });
