@@ -2,7 +2,6 @@
   "name": "rope-blocks",
   "version": "1.0.0",
   "description": "RoPE's hibrid programming interface",
-  "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,7 +20,11 @@
     "url": "https://github.com/cesarviana/rope_hybrid_interface/issues"
   },
   "homepage": "https://github.com/cesarviana/rope_hybrid_interface#readme",
+  "devDependencies": {
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
+  },
   "dependencies": {
-    "uglify-es": "^3.3.9"
+    "lodash": "^4.17.11"
   }
 }

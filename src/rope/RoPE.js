@@ -2,13 +2,13 @@
  * RoPE.
  * He can be programmed!
  */
+import Bluetooth from "../bluetooth/Bluetooth";
 
-class RoPE {
+export default class RoPE {
 
     constructor()
     {
         this.bluetooth = new Bluetooth();
-        this.instructions = [];
     }
 
     async search() {
@@ -21,22 +21,24 @@ class RoPE {
         );
     }
 
-    onConnected(callback){
+    onConnected(callback)
+    {
         this.bluetooth.on('connected', callback);
     }
 
-    onConnectionFailed(callback){
+    onConnectionFailed(callback)
+    {
         this.bluetooth.on('connection-failed', callback);
     }
 
-    execute()
+    async execute()
     {
-        this.sendInstructions('e')
+        await this.sendInstructions('e')
     }
 
-    clear()
+    async clear()
     {
-        this.sendInstructions('c')
+        await this.sendInstructions('c')
     }
 
     onMessage(callback) 

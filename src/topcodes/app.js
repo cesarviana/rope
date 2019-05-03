@@ -1,6 +1,11 @@
+import RoPE from '../rope/RoPE'
+import Camera from './Camera'
+
 class App {
-    constructor() {
-        this.codes = {
+    constructor() 
+    {
+        this.codes = 
+        {
             205: 'f',
             279: 'b',
             157: 'l',
@@ -9,18 +14,14 @@ class App {
         }
     }
     
-    log(l){
-        document.getElementById('log').innerHTML += l
-    }
-
-    start()
+    async start()
     {
-        this.log('starting..');
+        App.log('starting..');
         this.rope = new RoPE();
-        this.rope.search();
+        await this.rope.search();
 
         this.camera = new Camera(TopCodes,'video-canvas');
-        this.camera.start();
+        this.camera.startStop();
         
         this.camera.onChangeCodes(async (topcodes) => await this.onChangeCodes(topcodes));
     }
@@ -33,14 +34,25 @@ class App {
                         .reduce((a,b)=>a + b,'');
         const instructionsWithoutExecute = instructions.replace('e','');
         await this.rope.sendInstructions(instructionsWithoutExecute);
-        this.log(instructions)
+        App.log(instructions);
         if(instructions.includes('e'))
         {
             this.rope.execute()
         }
     }
+
+    static log(text)
+    {
+        document.getElementById('log').innerHTML += text
+    }
 }
 
-const app = new App();
 let startButton = document.getElementById('startButton');
-startButton.addEventListener('click', () => app.start());
+startButton.addEventListener('click', async () => {
+    const app = new App();
+    try {
+        await app.start();
+    } catch (e) {
+        alert(e);
+    }
+});

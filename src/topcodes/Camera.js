@@ -1,4 +1,4 @@
-class Camera 
+export default class Camera
 {
     constructor(TopCodes, videoId)
     {
@@ -15,7 +15,7 @@ class Camera
         this.onChangeCodesCallback = function(){}
     }
     
-    start()
+    startStop()
     {
         this.TopCodes.startStopVideoScan(this.videoId);
     }
@@ -24,7 +24,7 @@ class Camera
     {
         this.onChangeCodesCallback = callback;
         this.TopCodes.setVideoFrameCallback(this.videoId, jsonString => {
-            var json = JSON.parse(jsonString);
+            const json = JSON.parse(jsonString);
             if(this._topcodesChanged(json.topcodes))
             {
                 this.topcodes = json.topcodes;
@@ -39,14 +39,14 @@ class Camera
     
     /**
      * Checks if topcodes views by camera has changed.
-     * The image changes frequently, but at mean the information is correctly.
+     * The image changes frequently, but at mean the information the same.
      * For example. A fiducial mark coded as 327, by instant movement light variations
      * can be read as other code. 
      * @param {Array} newTopcodes 
      */
     _topcodesChanged(newTopcodes)
     {
-        this._countNumberOfCodesChanged(newTopcodes)
+        this._countNumberOfCodesChanged(newTopcodes);
         
         if(this._sameNumberOfCodes()){
             for(let i=0; i < this.topcodes.length; i++)
@@ -97,6 +97,6 @@ class Camera
 
     _sameNumberOfCodes()
     {
-        return this.changeOnTopcodesNumber == 0;
+        return this.changeOnTopcodesNumber === 0;
     }
 }

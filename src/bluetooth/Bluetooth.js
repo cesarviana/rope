@@ -1,5 +1,5 @@
 /* global navigator TextEncoder TextDecoder $ */
-class Bluetooth 
+export default class Bluetooth
 {
     constructor()
     {
@@ -38,7 +38,7 @@ class Bluetooth
     }
 
     _characteristicChanged(event) {
-        const value = this.decoder.decode( event.target.value ).trim()
+        const value = this.decoder.decode( event.target.value ).trim();
         log(`RoPE diz - ${value}` );
         this.notify('characteristic-changed', value)
     }
@@ -57,7 +57,7 @@ class Bluetooth
 
     setCharacteristic(value)
     {
-        const chunks = value.match(/.{1,20}/g)
+        const chunks = value.match(/.{1,20}/g);
         chunks.forEach(chunk=>{
             log(`Tela diz - ${chunk}` );
             this.characteristic.writeValue(this.encoder.encode(chunk))
@@ -69,7 +69,7 @@ class Bluetooth
     getEventHandlers(event) 
     {
         if (!this.eventHandlers[event])
-            this.eventHandlers[event] = []
+            this.eventHandlers[event] = [];
         return this.eventHandlers[event]
     }
 
@@ -82,8 +82,4 @@ class Bluetooth
     {
         return this.characteristic !== undefined;
     }
-}
-
-const log = function (text) {
-    console.log(text)
 }
