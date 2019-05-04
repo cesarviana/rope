@@ -7,9 +7,9 @@ export default class Camera
         this.topcodes = [];
         
         this.codeChangesCountArray = [];
-        this.codeChangesLimit = 10;
+        this.codeChangesLimit = 3;
         
-        this.changeOnTopcodesNumberLimit = 10;
+        this.changeOnTopcodesNumberLimit = 3;
         this.changeOnTopcodesNumber = 0;
         
         this.onChangeCodesCallback = function(){}
