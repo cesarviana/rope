@@ -1,10 +1,9 @@
 import RoPE from '../rope/RoPE'
 import Camera from './Camera'
+import Program from './Program'
 
-const EXECUTE_CHAR = 'e';
-const CLEAR_CHAR   = 'c';
-
-class App {
+class App
+{
     constructor() 
     {
         this.codes = 
@@ -14,18 +13,19 @@ class App {
             157: 'l',
             327: 'r',
             31: 'e'
-        }
+        };
         this.setupEventListeners();
     }
     
     setupEventListeners()
     {
-        let elements = document.getElementsByClassName('command-button')
+        let elements = document.getElementsByClassName('command-button');
         for(let i=0; i<elements.length;i++)
         {
             elements[i].addEventListener('click', event =>
             {
-                this.rope.sendInstructions(event.target.id);
+                const commandAttribute = event.target.id;
+                this.rope.sendInstructions(commandAttribute);
             })
         }
     }
@@ -35,9 +35,10 @@ class App {
         App.log('starting..');
         this.rope = new RoPE();
         await this.rope.search();
-        this.rope.onMessage(message=>{
+        this.rope.onMessage(message =>
+        {
             App.log('RoPE - "' + message + '"');
-        })
+        });
         
         this.camera = new Camera(TopCodes,'video-canvas');
         this.camera.startStop();
@@ -47,20 +48,20 @@ class App {
 
     async onChangeCodes(topcodes)
     {
-        const instructions = topcodes
+        const instructionsString = topcodes
                         .sort((a,b)=> a.x > b.x ? 1 : -1)
                         .map(topcode => this.codes[topcode.code] || '')
                         .reduce((a,b)=>a + b,'');
-        
-        const instructionsWithoutExecute = instructions.replace(EXECUTE_CHAR,'');
-        
-        if(instructions.includes('e'))
+
+        const program = new Program(instructionsString);
+
+        if(program.mustExecute())
         {
             try 
             {
-                const finalInstruction = CLEAR_CHAR + instructionsWithoutExecute + EXECUTE_CHAR;
-                App.log(finalInstruction);
-                await this.rope.sendInstructions( finalInstruction );
+                const build = program.build();
+                App.log(build);
+                await this.rope.sendInstructions( build );
             } 
             catch (error) 
             {
