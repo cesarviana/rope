@@ -4,8 +4,10 @@ import Program from './Program'
 
 class App
 {
-    constructor() 
+    constructor(camera) 
     {
+        this.camera = camera;
+        this.rope = new RoPE();
         this.codes = 
         {
             205: 'f',
@@ -33,15 +35,11 @@ class App
     async start()
     {
         App.log('starting..');
-        this.rope = new RoPE();
         await this.rope.search();
         this.rope.onMessage(message =>
         {
             App.log('RoPE - "' + message + '"');
         });
-        
-        this.camera = new Camera(TopCodes,'video-canvas');
-        this.camera.startStop();
         
         this.camera.onChangeCodes(async (topcodes) => await this.onChangeCodes(topcodes));
     }
@@ -76,11 +74,14 @@ class App
     }
 }
 
+const camera = new Camera(TopCodes,'video-canvas');
+camera.startStop();
+
 let startButton = document.getElementById('startButton');
 startButton.addEventListener('click', async () => {
-    const app = new App();
+    const app = new App(camera);
     try {
-        await app.start();
+       // await app.start();
     } catch (e) {
         console.log(e);
     }
