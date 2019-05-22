@@ -25,7 +25,6 @@ export default class Camera
         this.onChangeCodesCallback = callback;
         this.TopCodes.setVideoFrameCallback(this.videoId, jsonString => {
             const json = JSON.parse(jsonString);
-            console.log(jsonString);
             if(this._topcodesChanged(json.topcodes))
             {
                 this.topcodes = json.topcodes;

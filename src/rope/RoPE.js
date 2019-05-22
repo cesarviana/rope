@@ -11,7 +11,8 @@ export default class RoPE {
         this.bluetooth = new Bluetooth();
     }
 
-    async search() {
+    async search() 
+    {
         await this.bluetooth.search(
             {
                 serviceUuid: '0000ffe0-0000-1000-8000-00805f9b34fb',
