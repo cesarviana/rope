@@ -1,23 +1,16 @@
 /* global TopCodes */
 import RoPE from '../rope/RoPE'
 import Camera from './Camera'
-import Program from './Program'
 import PWA from '../pwa/'
+import Compiler from './Compiler'
 
 class App
 {
-    constructor(camera, rope) 
+    constructor(camera, rope, compiler) 
     {
+        this.compiler = compiler;
         this.camera = camera;
         this.rope = rope;
-        this.codes = 
-        {
-            205: 'f',
-            279: 'b',
-            157: 'l',
-            327: 'r',
-            31:  'e'
-        };
         this.setupEventListeners();
     }
     
@@ -37,35 +30,32 @@ class App
     async start()
     {
         App.log('starting..');
-        await this.rope.search();
-        this.rope.onMessage(message =>
+        try
         {
-            App.log('RoPE - "' + message + '"');
-        });
+            await this.rope.search();
+            this.rope.onMessage(message =>
+            {
+                App.log('RoPE - "' + message + '"');
+            });    
+        }
+        catch (e)
+        {
+            console.error(e)
+        }
+        
         this.camera.onChangeCodes(async (topcodes) => await this.onChangeCodes(topcodes));
         this.camera.startStop();
+        
     }
 
     async onChangeCodes(topcodes)
     {
-        const instructionsString = topcodes
-                        .sort((a,b)=> a.x > b.x ? 1 : -1)
-                        .map(topcode => this.codes[topcode.code] || '')
-                        .reduce((a,b)=>a + b,'');
-
-        const program = new Program(instructionsString);
-
-        if(instructionsString)
-        {
-            App.log(instructionsString);
-        }
-
-        if(program.mustExecute())
+        const instructionsString = this.compiler.compile(topcodes)
+        if(instructionsString.includes('e'))
         {
             try 
             {
-                const build = program.build();
-                await this.rope.sendInstructions( build );
+                await this.rope.sendInstructions( instructionsString );
             } 
             catch (error) 
             {
@@ -76,25 +66,19 @@ class App
 
     static log(text)
     {
-        document.getElementById('log').innerHTML += text + '<br>'
+        document.getElementById('status').innerHTML = text + '<br>'
     }
 }
 
 const VIDEO_CANVAS_ID = 'video-canvas'
 const camera = new Camera(TopCodes, VIDEO_CANVAS_ID);
 const rope = new RoPE();
+const compiler = new Compiler();
+const app = new App(camera, rope, compiler);
 
 let startButton = document.getElementById('startButton');
-
-startButton.addEventListener('click', async (event) => {
-    const app = new App(camera, rope);
-    
-    const canvas = document.getElementById(VIDEO_CANVAS_ID);
-    canvas.width = window.outerWidth * 1.8;
-    canvas.height = window.outerHeight * 1.8;
-    
-    canvas.webkitRequestFullscreen()
-    
+startButton.addEventListener('click', async (event) => 
+{
     try 
     {
        await app.start();

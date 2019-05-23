@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  	<!--<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1,maximum-scale=1"/>-->
+  	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1,maximum-scale=1"/>
   	<link rel="icon" href="favicon.ico" />
   <title>RoPE Programming</title>
+  <meta charset="utf-8"/>
 </head>
 
 <body style="padding:0; margin:0;">
+  <h1 id='status'>Status</h1>
   
   <button id="startButton">Conectar</button>
   <button class="command-button" id="l">Left</button>
@@ -15,11 +17,9 @@
   <button class="command-button" id="b">Backward</button>
   <button class="command-button" id="r">Right</button>
 
-  <canvas id="video-canvas" style="background: #ddd;"></canvas>
+  <canvas id="video-canvas" style="background: #ddd;">
+  </canvas>
   
-  <h1 id='status'>Status</h1>
-  <p id="log"></p>
-
   <script src="src/topcodes/topcodes.js"></script>
   <script src="dist/topcodes.js"></script>
 </body>
