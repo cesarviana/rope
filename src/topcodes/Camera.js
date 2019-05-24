@@ -15,21 +15,20 @@ export default class Camera
         this.onChangeCodesCallback = function(){}
     }
     
-    startStop()
+    start()
     {
+        if(this.started)
+            return
         this.TopCodes.startStopVideoScan(this.canvasId);
+        this.started = true;
     }
     
     onChangeCodes(callback)
     {
         this.onChangeCodesCallback = callback;
         this.TopCodes.setVideoFrameCallback(this.canvasId, jsonString => {
-            if(Math.random() < 0.7)
-            {
-                return;
-            }
-            const topcodes = JSON.parse(jsonString).topcodes;
             
+            const topcodes = JSON.parse(jsonString).topcodes;
             this._drawPositions(topcodes)
             
             if(this._topcodesChanged(topcodes))
@@ -48,9 +47,14 @@ export default class Camera
     {
         const canvas = document.getElementById(this.canvasId);
         const ctx = canvas.getContext('2d');
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "yellow";
         topcodes.forEach(topcode=>
         {
-            ctx.fillText(topcode.code, topcode.x, topcode.y);
+            ctx.fillText(`radius:${topcode.radius}`, topcode.x, topcode.y);
+            ctx.fillText(`x:${topcode.x}`,           topcode.x, topcode.y+20);
+            ctx.fillText(`y:${topcode.y}`,           topcode.x, topcode.y+40);
+            ctx.fillText(`angle:${topcode.angle}`,   topcode.x, topcode.y+60);
         })
     }
     

@@ -19,22 +19,19 @@ export default class Compiler
     
     compile(topcodes)
     {
-        let instructionsString = topcodes.sort((a,b)=>{
-            if(a.y > b.y)
+        let instructionsString = topcodes.sort((a,b) => 
+        { 
+            if( Math.abs(a.y - b.y) < 20 ) // same line
             {
-                if(a.x > b.x)
-                {
-                    return 1
-                }
-                return -1
-            }
-            else 
+                return a.x - b.x
+            } 
+            else // different lines
             {
-                return -1    
+                return a.y - b.y
             }
         })
         .map(topcode => this.codes[topcode.code] || '')
-        .reduce((a,b)=>a + b,'');
+        .reduce((strA,strB) => strA + strB, '');
         
         if(instructionsString.includes('e'))
         {

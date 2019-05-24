@@ -1,22 +1,27 @@
-/* global TopCodes */
 import RoPE from '../rope/RoPE'
 import Camera from './Camera'
 import PWA from '../pwa/'
 import Compiler from './Compiler'
+import StartButton from './StartButton'
 
-class App
+export default class App
 {
     constructor(camera, rope, compiler) 
     {
         this.compiler = compiler;
         this.camera = camera;
         this.rope = rope;
-        this.setupEventListeners();
+        this._setupEventListeners();
         this.executeTopCodeAngle = undefined;
+        this.startButton = new StartButton();
     }
     
-    setupEventListeners()
+    _setupEventListeners()
     {
+        this.camera.onChangeCodes(topcodes => 
+            this.ifChangedParseAndSendInstructions(topcodes)
+        );
+        
         let elements = document.getElementsByClassName('command-button');
         for(let i=0; i<elements.length;i++)
         {
@@ -30,7 +35,12 @@ class App
     
     async start()
     {
-        App.log('starting..');
+        this._tryConnectRoPE()
+        this.camera.start();
+    }
+
+    async _tryConnectRoPE()
+    {
         try
         {
             await this.rope.search();
@@ -43,49 +53,16 @@ class App
         {
             App.log(e.message)
         }
-        
-        this.camera.onChangeCodes(topcodes => 
-            this.ifChangedParseAndSendInstructions(topcodes)
-        );
-        this.camera.startStop();
-        
     }
 
     async ifChangedParseAndSendInstructions(topcodes)
     {
-        if(this.changedExecuteTopCodeAngle(topcodes))
+        if(this.startButton.isPressed(topcodes))
         {
             await this.parseTopcodesAndSendInstructions(topcodes)            
         }
     }
     
-    changedExecuteTopCodeAngle(topcodes)
-    {
-        const executeTopCode = topcodes.find(topcode => topcode.code === 31) // TODO
-        
-        if(!executeTopCode)
-        {
-            return false;
-        }
-        
-        const executeTopCodeAngle = Math.abs(executeTopCode.angle)
-        
-        if(this.executeTopCodeAngle === undefined)
-        {
-            this.executeTopCodeAngle = executeTopCodeAngle;
-            return false;
-        }
-        
-        const angleDifference = Math.abs(executeTopCodeAngle - this.executeTopCodeAngle);
-        
-        if( angleDifference > 1 ) // TODO
-        {
-            this.executeTopCodeAngle = executeTopCodeAngle;
-            return true;
-        }
-        
-        return false;
-    }
     
     async parseTopcodesAndSendInstructions(topcodes)
     {
@@ -109,26 +86,3 @@ class App
         document.getElementById('status').innerHTML = text + '<br>'
     }
 }
-
-const VIDEO_CANVAS_ID = 'video-canvas'
-const camera = new Camera(TopCodes, VIDEO_CANVAS_ID);
-const rope = new RoPE();
-const compiler = new Compiler();
-const app = new App(camera, rope, compiler);
-
-let startButton = document.getElementById('startButton');
-startButton.addEventListener('click', async (event) => 
-{
-    try 
-    {
-       await app.start();
-    } 
-    catch (e) 
-    {
-        console.log(e);
-    }
-});
-
-const pwa = new PWA();
-pwa.registerServiceWorker();
-
