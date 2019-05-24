@@ -9,17 +9,17 @@ export default class Compiler
         this.CLEAR_CHAR   = 'c';
         this.codes = 
         {
-            205: 'f',
+            327: 'f',
             279: 'b',
             157: 'l',
-            327: 'r',
+            205: 'r',
             31:  'e'
         };       
     }
     
     compile(topcodes)
     {
-        const instructionsString = topcodes.sort((a,b)=>{
+        let instructionsString = topcodes.sort((a,b)=>{
             if(a.y > b.y)
             {
                 if(a.x > b.x)
@@ -39,7 +39,7 @@ export default class Compiler
         if(instructionsString.includes('e'))
         {
             const instructionsWithoutExecute = instructionsString.replace(this.EXECUTE_CHAR, '');
-            return this.CLEAR_CHAR + this.instructionsWithoutExecute + this.EXECUTE_CHAR;   
+            return this.CLEAR_CHAR + instructionsWithoutExecute + this.EXECUTE_CHAR;
         } 
         
         return this.CLEAR_CHAR + instructionsString;

@@ -1,15 +1,15 @@
 export default class Camera
 {
-    constructor(TopCodes, videoId)
+    constructor(TopCodes, canvasId)
     {
         this.TopCodes = TopCodes;
-        this.videoId = videoId;
+        this.canvasId = canvasId;
         this.topcodes = [];
         
         this.codeChangesCountArray = [];
-        this.codeChangesLimit = 3;
+        this.codeChangesLimit = 5;
         
-        this.changeOnTopcodesNumberLimit = 3;
+        this.changeOnTopcodesNumberLimit = 5;
         this.changeOnTopcodesNumber = 0;
         
         this.onChangeCodesCallback = function(){}
@@ -17,23 +17,40 @@ export default class Camera
     
     startStop()
     {
-        this.TopCodes.startStopVideoScan(this.videoId);
+        this.TopCodes.startStopVideoScan(this.canvasId);
     }
     
     onChangeCodes(callback)
     {
         this.onChangeCodesCallback = callback;
-        this.TopCodes.setVideoFrameCallback(this.videoId, jsonString => {
-            const json = JSON.parse(jsonString);
-            if(this._topcodesChanged(json.topcodes))
+        this.TopCodes.setVideoFrameCallback(this.canvasId, jsonString => {
+            if(Math.random() < 0.7)
             {
-                this.topcodes = json.topcodes;
+                return;
+            }
+            const topcodes = JSON.parse(jsonString).topcodes;
+            
+            this._drawPositions(topcodes)
+            
+            if(this._topcodesChanged(topcodes))
+            {
+                this.topcodes = topcodes;
                 
                 this.codeChangesCountArray = [];
                 this.changeOnTopcodesNumber = 0;
 
-                this.onChangeCodesCallback(this.topcodes);
+                this.onChangeCodesCallback(topcodes);
             }
+        })
+    }
+    
+    _drawPositions(topcodes)
+    {
+        const canvas = document.getElementById(this.canvasId);
+        const ctx = canvas.getContext('2d');
+        topcodes.forEach(topcode=>
+        {
+            ctx.fillText(topcode.code, topcode.x, topcode.y);
         })
     }
     
@@ -51,7 +68,9 @@ export default class Camera
         if(this._sameNumberOfCodes()){
             for(let i=0; i < this.topcodes.length; i++)
             {
-                if(this.topcodes[i].code !== newTopcodes[i].code)
+                if(this.topcodes[i].code !== newTopcodes[i].code ||
+                    this.topcodes[i].angle !== newTopcodes[i].angle
+                )
                 {
                     this._incrementCodeChange(i)
                 }

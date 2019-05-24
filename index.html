@@ -5,19 +5,29 @@
   	<link rel="icon" href="favicon.ico" />
   <title>RoPE Programming</title>
   <meta charset="utf-8"/>
+  <style>
+  	body {
+  		background: black;
+  		color: white;
+  		text-align: center;
+  	}
+  	#startButton {
+  	  width: 80%;
+  	  height: 40px;
+  	  font-size: 25px;
+  	  background: green;
+  	  border: none;
+  	  margin: 10px;
+  	}
+  </style>
 </head>
 
 <body style="padding:0; margin:0;">
   <h1 id='status'>Status</h1>
   
   <button id="startButton">Conectar</button>
-  <button class="command-button" id="l">Left</button>
-  <button class="command-button" id="f">Forward</button>
-  <button class="command-button" id="e">Execute</button>
-  <button class="command-button" id="b">Backward</button>
-  <button class="command-button" id="r">Right</button>
-
-  <canvas id="video-canvas" style="background: #ddd;">
+  
+  <canvas id="video-canvas" width="400" height="400">
   </canvas>
   
   <script src="src/topcodes/topcodes.js"></script>
