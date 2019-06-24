@@ -1,12 +1,7 @@
-class Point {
-    constructor(x, y) {
-        this.x = x
-        this.y = y
-    }
-}
-
-class Rectangle {
-    constructor($elm) {
+import Point from './Point'
+export default class Rectangle {
+    constructor($elm) 
+    {
         this.setElm($elm)
     }
     setElm($elm) {

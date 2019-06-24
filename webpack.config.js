@@ -1,6 +1,7 @@
 module.exports = {
     entry: {
-        topcodes: './src/topcodes/app.js'
+        //topcodes: './src/topcodes/app.js',
+        app: './src/app2.js'
     },
     mode: 'development',
     watch: true,

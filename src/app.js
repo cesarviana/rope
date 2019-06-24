@@ -4,12 +4,7 @@ $(function () {
     const app = {
         rope: new RoPE(),
         blocks: new BlocksView(),
-        sounds: {
-            start: new Audio('assets/startsound.wav'),
-            stop: new Audio('assets/stopsound.wav'),
-            error: new Audio('assets/error.flac'),
-            next: new Audio('assets/next.wav'),
-        },
+        
         executedIndex: -1,
         commands : '',
         completedCommands : true
@@ -17,71 +12,61 @@ $(function () {
 
     // Event listeners
 
-    $('#magnifying-button').on('click', () => {
-        app.startSearch()
-    })
+    // $('#debug-button').on('click', () => {
+    //     app.toggleDebug()
+    // })
 
-    $('#rope-connection').on('click', () => {
-        if ($('#rope-connection').hasClass('disconnected')) {
-            app.startSearch()
-        }
-    })
-
-    $('#debug-button').on('click', () => {
-        app.toggleDebug()
-    })
-
-    $('#go-block').on('mouseup', (e) => {
-        if(app.blockGoClick) 
-            return
+    // $('#go-block').on('mouseup', (e) => {
+    //     if(app.blockGoClick) 
+    //         return
         
-        app.rope.execute()
-        app.blockGoClick = true
-        $('#go-block').addClass('disabled')
-        setTimeout(_=>{
-            app.blockGoClick = false
-            $('#go-block').removeClass('disabled')
-        }, 1000)
-    })
+    //     app.rope.execute()
+    //     app.blockGoClick = true
+    //     $('#go-block').addClass('disabled')
+    //     setTimeout(_=>{
+    //         app.blockGoClick = false
+    //         $('#go-block').removeClass('disabled')
+    //     }, 1000)
+    // })
 
-    app.rope.onConnected(() => {
-        app.showProgrammingView()
-        app.setConnected(true)
-        app.rope.clear();
-        clearInterval('changeSleepingImage')
-        app.resetProgrammingView()
-        app.debug = false
-        app.showDebugging(app.debug)
-        app.pointPieceToExecute()
-    })
+    // app.rope.onConnected(() => {
+      //  app.showProgrammingView()
+      //  app.setConnected(true)
+      //  app.rope.clear();
+      //  clearInterval('changeSleepingImage')
+      //  app.resetProgrammingView()
+      //  app.debug = false
+      //  app.showDebugging(app.debug)
+      //  app.pointPieceToExecute()
+    // })
 
-    app.rope.onConnectionFailed(() => {
-        app.showMagnifying(false)
-        app.setConnected(false)
-        app.showSleepingRoPE()
-        app.showConnectionView()
-    })
+    // app.rope.onConnectionFailed(() => {
+      //  app.showMagnifying(false)
+      //  app.setConnected(false)
+      //  app.showSleepingRoPE()
+      //  app.showConnectionView()
+    //})
 
     app.rope.onMessage(app.handleMessage)
 
-    app.blocks.on('changed', (pieces) => {
-        app.setPiecesCharacteristic(pieces)
-    })
+    // app.blocks.on('changed', (pieces) => {
+    //     app.setPiecesCharacteristic(pieces)
+    // })
 
-    app.blocks.on('click', (index) => {
-        // If debug is active and execution started, must listen clicks on
-        // next piece
-        if (app.debug && app.started) {
-            const notClickedOnNextIndex = app.executedIndex + 1 != index
-            if (notClickedOnNextIndex) {
-                app.sounds.error.play()
-            } else {
-                app.sounds.next.play()
-                // TODO
-                // app.rope.executeNextInstruction()
-            }
-        }
-    })
+    // app.blocks.on('click', (index) => {
+    //     // If debug is active and execution started, must listen clicks on
+    //     // next piece
+    //     if (app.debug && app.started) {
+    //         const notClickedOnNextIndex = app.executedIndex + 1 != index
+    //         if (notClickedOnNextIndex) {
+    //             app.sounds.error.play()
+    //         } else {
+    //             app.sounds.next.play()
+    //             // TODO
+    //             // app.rope.executeNextInstruction()
+    //         }
+    //     }
+    // })
 
     $(window).on('scroll', () => {
         app.adjustShadowWidth()
@@ -89,63 +74,39 @@ $(function () {
 
     // Methods to update ui
 
-    app.showMagnifying = (show) => {
-        if (show) {
-            $('#magnifying').show('fast')
-        } else {
-            $('#magnifying').hide('slow')
-        }
-    }
+    //app.showConnectionView = () => {
+    //     if ($('#connecting-view').is(':visible'))
+    //         return
+    //     $('#programming-view').hide(400, () => $('#connecting-view').show())
+    // }
+   
+    // app.showDebugging = (show) => {
+    //     if(show){
+    //         $('#debug-button').addClass('active')
+    //         $('#placeholders-area').addClass('debug')
+    //     } else {
+    //         $('#debug-button').removeClass('active')
+    //         $('#placeholders-area').removeClass('debug')
+    //     }
+    // }
 
-    app.showProgrammingView = () => {
-        $('#connecting-view').hide(400, () => $('#programming-view').show())
-    }
+    // app.showShadow = () => {
+    //     app.sounds.start.play()
+    //     if (!$('#shadow').length) {
+    //         $('<div id="shadow"></div>').css({
+    //             width: '100%',
+    //             height: '100vh',
+    //             opacity: '0.5',
+    //             background: 'gray',
+    //             position: 'fixed',
+    //             'z-index': '3',
+    //             display: 'none'
+    //         }).prependTo($('#programming-view'))
+    //     }
 
-    app.showConnectionView = () => {
-        if ($('#connecting-view').is(':visible'))
-            return
-        $('#programming-view').hide(400, () => $('#connecting-view').show())
-    }
-    
-    function changeSleepingImage(){
-        if( $('#rope').attr('src') == 'assets/rope_not_found.svg') {
-            $('#rope').attr('src','assets/rope_not_found_2.svg')
-        } else {
-            $('#rope').attr('src','assets/rope_not_found.svg')
-        }
-    }
-    
-    app.showSleepingRoPE = () => {
-        setInterval(changeSleepingImage , 2000)
-    }
-
-    app.showDebugging = (show) => {
-        if(show){
-            $('#debug-button').addClass('active')
-            $('#placeholders-area').addClass('debug')
-        } else {
-            $('#debug-button').removeClass('active')
-            $('#placeholders-area').removeClass('debug')
-        }
-    }
-
-    app.showShadow = () => {
-        app.sounds.start.play()
-        if (!$('#shadow').length) {
-            $('<div id="shadow"></div>').css({
-                width: '100%',
-                height: '100vh',
-                opacity: '0.5',
-                background: 'gray',
-                position: 'fixed',
-                'z-index': '3',
-                display: 'none'
-            }).prependTo($('#programming-view'))
-        }
-
-        $('#shadow').fadeIn(400, 'linear')
-        app.blocks.highlightSnapped()
-    }
+    //     $('#shadow').fadeIn(400, 'linear')
+    //     app.blocks.highlightSnapped()
+    // }
 
     app.showStopped = _ => {
         app.sounds.stop.play()
@@ -156,10 +117,10 @@ $(function () {
         app.blocks.hidePointer()
     }
 
-    app.hideShadow = _ => {
-        app.blocks.hideHighlight()
-        $('#shadow').fadeOut(1000, 'linear')
-    }
+    // app.hideShadow = _ => {
+    //     app.blocks.hideHighlight()
+    //     $('#shadow').fadeOut(1000, 'linear')
+    // }
 
     app.showAdded = (commands) => {
         app.blocks.setCommands(commands)
@@ -183,36 +144,36 @@ $(function () {
         }
     }
     
-    app.resetProgrammingView = () =>{
-        app.hideShadow()
-        app.blocks.removeSnappedPieces()
-        app.blocks.enableDragging()
-    }
+    // app.resetProgrammingView = () =>{
+    //     app.hideShadow()
+    //     app.blocks.removeSnappedPieces()
+    //     app.blocks.enableDragging()
+    // }
 
     // Methods to dealing with the model
 
-    app.startSearch = () => {
-        app.rope.search()
-        app.showMagnifying(true)
-        app.showConnectionView()
-    }
+    // app.startSearch = () => {
+    //     app.rope.search()
+    //     app.showMagnifying(true)
+    //     app.showConnectionView()
+    // }
 
-    app.registerServiceWorker = () => {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker
-                .register('service-worker.js').then((reg) => {
-                    console.log('Service Worker Registered')
-                })
-        }
-    }
+    // app.registerServiceWorker = () => {
+    //     if ('serviceWorker' in navigator) {
+    //         navigator.serviceWorker
+    //             .register('service-worker.js').then((reg) => {
+    //                 console.log('Service Worker Registered')
+    //             })
+    //     }
+    // }
 
-    app.setConnected = (connected) => {
-        if (connected){
-            $('#rope-connection').addClass('connected').removeClass('disconnected')
-        } else {
-            $('#rope-connection').addClass('disconnected').removeClass('connected')
-        }
-    }
+    // app.setConnected = (connected) => {
+    //     if (connected){
+    //         // - $('#rope-connection').addClass('connected').removeClass('disconnected')
+    //     } else {
+    //         // - $('#rope-connection').addClass('disconnected').removeClass('connected')
+    //     }
+    // }
 
     app.handleMessage = (characteristic) => {
         
@@ -295,16 +256,16 @@ $(function () {
         //app.rope.setCharacteristic('<d:' + (app.debug ? 0 : 1) + '>')
     }
 
-    app.setPiecesCharacteristic = (pieces) => {
-        let commands = ''
-        pieces.forEach(piece => {
-            commands += piece.$elm.attr('data-command')
-        })
-        app.rope.sendInstructions(commands)
-    }
+    // app.setPiecesCharacteristic = (pieces) => {
+    //     let commands = ''
+    //     pieces.forEach(piece => {
+    //         commands += piece.$elm.attr('data-command')
+    //     })
+    //     app.rope.sendInstructions(commands)
+    // }
 
     // Start
 
-    app.registerServiceWorker()
+    // app.registerServiceWorker()
 
 })

@@ -1,7 +1,18 @@
 /* global Rectangle $ */
-const audio = new Audio('assets/snapsound.mp3')
+import * as $ from 'jquery';
+import 'jquery-ui-bundle';
 
-class BlocksView {
+// https://stackoverflow.com/questions/39348579/how-to-import-jquery-ui-touch-punch-in-angular-2-webpack-app
+// The require is important, vide link
+(window).jQuery = $;
+require('jquery-ui-touch-punch');
+
+const audio = new Audio('src/assets/snapsound.mp3')
+
+import Rectangle from '../geometry/Rectangle'
+import Point from '../geometry/Point'
+
+export default class BlocksView {
 
     constructor() {
         this.idCounter = 0
@@ -12,6 +23,8 @@ class BlocksView {
         this.$placeholdersArea = $('#placeholders-area')
         this.highlightPiece = new Rectangle($('#highlight'))
         this.isTimeToSnap = true
+
+        this.callbacks = []
 
         this.createInitialPieces()
         this.createInitialPlaceholders()
@@ -474,14 +487,17 @@ class BlocksView {
     }
 
     on(event, callback) {
-        if (!this[event]) {
-            this[event] = []
+        if (!this.callbacks[event]) {
+            this.callbacks[event] = []
         }
-        this[event].push(callback)
+        this.callbacks[event].push(callback)
     }
 
     notify(event, param) {
-        this[event].forEach(callback => callback.call(this, param))
+        if(this.callbacks[event])
+        {
+            this.callbacks[event].forEach(callback => callback.call(this, param))
+        }
     }
 
     notifyChangedPiecesIfChanged() {

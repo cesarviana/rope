@@ -4,6 +4,7 @@ export default class RoPE
     {
         this.onConnectedCallbacks = []
         this.onConnectionFailedCallbacks = []
+        this.onMessageCallbacks = []
     }
     
     search()
@@ -14,16 +15,16 @@ export default class RoPE
             const connected = Math.random() > 0.5;
             if (connected)
             {
-                this.notify(this.onConnectedCallbacks)
+                this._notify(this.onConnectedCallbacks)
             }
             else 
             {
-               this.notify(this.onConnectionFailedCallbacks)
+               this._notify(this.onConnectionFailedCallbacks)
             }
         }, random)
     }
 
-    notify(callbackArray)
+    _notify(callbackArray)
     {
         callbackArray.forEach(callback=>{
             callback.call(this)
@@ -40,4 +41,22 @@ export default class RoPE
         this.onConnectionFailedCallbacks.push(callback)
     }
 
+    onMessage(callback)
+    {
+        this.onMessageCallbacks.push(callback)
+    }
+
+    sendInstructions(instructions)
+    {
+        console.log(instructions)
+    }
+
+    clear()
+    {
+    }
+
+    execute()
+    {
+        console.log('RoPE: Execute')
+    }
 }
