@@ -1,7 +1,7 @@
 {
   "name": "rope-blocks",
   "version": "1.0.0",
-  "description": "RoPE's hibrid programming interface",
+  "description": "RoPE's hybrid programming interface",
   "scripts": {
     "dev": "webpack --watch & http-server -S",
     "test": "echo \"Error: no test specified\" && exit 1"
