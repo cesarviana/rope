@@ -3,10 +3,17 @@ const app = express();
 
 const path = require('path');
 
-app.use(express.static('/'))
+app.use(express.static('src/assets'))
+app.use(express.static('src/programming'))
+app.use(express.static('src/style'))
+app.use(express.static('src/connecting'))
+app.use(express.static('dist'))
+app.use(express.static('public'))
 
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 app.listen(8080);
+
+console.log('listening');

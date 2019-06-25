@@ -8,19 +8,17 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 	<link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
 	<meta name="theme-color" content="#ffffff">
-	<link rel="manifest" href="manifest.json">
 	<meta charset="utf-8">
 	<meta property="og:site_name" content="RoPE">
 	<meta property="og:image" content="RoPE">
 	<title>RoPE</title>
-	<link rel="stylesheet" href="src/connecting/connecting.css" />
-	<link rel="stylesheet" href="src/style/buttons.css" />
-	<link rel="stylesheet" href="src/style/reset.css" />
-	<link rel="stylesheet" href="src/style/general.css" />
-	<link rel="stylesheet" href="src/programming/programming.css" />
+	<link rel="stylesheet" href="connecting.css" />
+	<link rel="stylesheet" href="buttons.css" />
+	<link rel="stylesheet" href="reset.css" />
+	<link rel="stylesheet" href="general.css" />
+	<link rel="stylesheet" href="programming.css" />
 	<meta name="msapplication-TileImage" content="android-chrome-192x192.png">
   	<meta name="msapplication-TileColor" content="#e6c099">
-    <base href="/"/>
 </head>
 
 <body>
@@ -29,16 +27,16 @@
 			<div id="searching" class="square center">
 				<div>
 					<div style="position:absolute; width: 100%">
-						<img name="magnifying" id="magnifying" src="src/assets/magnifying.svg" alt="lupa procurando o rope" style="margin-top: 40%; display: none">
+						<img name="magnifying" id="magnifying" src="magnifying.svg" alt="lupa procurando o rope" style="margin-top: 40%; display: none">
 					</div>
-					<img id="rope" src="src/assets/rope.svg" alt="robozinho rope">
+					<img id="rope" src="rope.svg" alt="robozinho rope">
 				</div>
 			</div>
 		</div>
 		<div id="smaller-rect-bottom" class="area">
 			<hr>
 			<button id="magnifying-button" class="button large">
-				<img src="src/assets/rope_magnifying.svg" alt="botão para procurar o rope">
+				<img src="rope_magnifying.svg" alt="botão para procurar o rope">
 			</button>
 		</div>
 	</div>
@@ -46,47 +44,47 @@
 	<div id="programming-view" class="box">
 		<div id="top-area" class="area header">
 			<div id="rope-connection">
-				<img src="src/assets/rope_2.svg"></img>
+				<img src="rope_2.svg"></img>
 				<span id="connection-status">
 				</span>
 			</div>
 			<div id="available-pieces">
 				<div class="available block piece f" data-command="f">
-					<img src="src/assets/f.svg"></img>
+					<img src="f.svg"></img>
 				</div>
 				<div class="available block piece b" data-command="b">
-					<img src="src/assets/b.svg"></img>
+					<img src="b.svg"></img>
 				</div>
 				<div class="available block piece l" data-command="l">
-					<img src="src/assets/l.svg"></img>
+					<img src="l.svg"></img>
 				</div>
 				<div class="available block piece r" data-command="r">
-					<img src="src/assets/r.svg"></img>
+					<img src="r.svg"></img>
 				</div>
 			</div>
 		</div>
 
 		<button id="debug-button">
-			<img src="src/assets/steps.svg" alt="Ativar/desativar depuração">
+			<img src="steps.svg" alt="Ativar/desativar depuração">
 		</button>
 
 		<div id="pointer" style="display: none">
-			<img src="src/assets/pointer.svg" alt="Mão direcionada para peça que deve ser clicada ( a cima )">
+			<img src="pointer.svg" alt="Mão direcionada para peça que deve ser clicada ( a cima )">
 		</div>
 
 		<div id="highlight" class="block" style="display: none; position: absolute; z-index: 9999">
-			<img src="src/assets/highlight.svg" alt="Destaque sobre a peça que está sendo executada">
+			<img src="highlight.svg" alt="Destaque sobre a peça que está sendo executada">
 		</div>
 
 		<div id="placeholders-area" class="content centered-content debug">
 			<div class="block placeholder">
-				<img src="src/assets/placeholder.svg"></img>
+				<img src="placeholder.svg"></img>
 			</div>
 			<div class="block placeholder">
-				<img src="src/assets/placeholder.svg"></img>
+				<img src="placeholder.svg"></img>
 			</div>
 			<div class="block placeholder">
-				<img src="src/assets/placeholder.svg"></img>
+				<img src="placeholder.svg"></img>
 			</div>
 			<div id="go-block" class="block">
 			</div>
