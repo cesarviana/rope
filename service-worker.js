@@ -9,8 +9,7 @@ var filesToCache = [
     'android-chrome-192x192.png',
     'android-chrome-384x384.png',
     'android-chrome-530x530.png',
-    'app.js',
-    'bluetooth/bluetooth.js',
+    'dist/app.js',
     'assets/highlight.svg',
     'assets/f.svg',
     'assets/f_exit.svg',
@@ -42,18 +41,9 @@ var filesToCache = [
     'assets/searching.svg',
     'assets/highlight.svg',
     'assets/next.wav',
-    'jquery/jquery-3.3.1.min.js',
-    'jquery/jquery-ui.min.js',
-    'jquery/jquery.ui.touch-punch.min.js',
-    'connecting/connecting.css',
-    'connecting/connecting.js',
     'mstile-150x150.png',
-    'programming/programming.css',
-    'programming/programming.js',
-    'programming/geometry.js',
-    'style/buttons.css',
-    'style/reset.css',
-    'style/general.css'
+    'dist/app.js',
+    'dist/style.css',
 ]
 
 self.addEventListener('install', function(event) {

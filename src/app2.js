@@ -231,7 +231,7 @@ class App {
     // util
     asset(file)
     {
-        return 'src/assets/' + file
+        return 'assets/' + file
     }
 
     registerServiceWorker() 

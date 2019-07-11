@@ -7,7 +7,7 @@ import 'jquery-ui-bundle';
 (window).jQuery = $;
 require('jquery-ui-touch-punch');
 
-const audio = new Audio('src/assets/snapsound.mp3')
+const audio = new Audio('assets/snapsound.mp3')
 
 import Rectangle from '../geometry/Rectangle'
 import Point from '../geometry/Point'
