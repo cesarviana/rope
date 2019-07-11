@@ -38,31 +38,10 @@
 	</div>
 
 	<div id="programming-view" class="box">
-		<div id="top-area" class="area header">
-			<div id="rope-connection">
-				<img src="assets/rope_2.svg"></img>
-				<span id="connection-status">
-				</span>
-			</div>
-			<div id="available-pieces">
-				<div class="available block piece f" data-command="f">
-					<img src="assets/f.svg"></img>
-				</div>
-				<div class="available block piece b" data-command="b">
-					<img src="assets/b.svg"></img>
-				</div>
-				<div class="available block piece l" data-command="l">
-					<img src="assets/l.svg"></img>
-				</div>
-				<div class="available block piece r" data-command="r">
-					<img src="assets/r.svg"></img>
-				</div>
-			</div>
-		</div>
-
-		<button id="debug-button">
+		
+		<!--<button id="debug-button">
 			<img src="assets/steps.svg" alt="Ativar/desativar depuração">
-		</button>
+		</button>-->
 
 		<div id="pointer" style="display: none">
 			<img src="assets/pointer.svg" alt="Mão direcionada para peça que deve ser clicada ( a cima )">
@@ -72,7 +51,7 @@
 			<img src="assets/highlight.svg" alt="Destaque sobre a peça que está sendo executada">
 		</div>
 
-		<div id="placeholders-area" class="content centered-content debug">
+		<div id="placeholders-area" class="centered-content debug">
 			<div class="block placeholder">
 				<img src="assets/placeholder.svg"></img>
 			</div>
@@ -81,10 +60,34 @@
 			</div>
 			<div class="block placeholder">
 				<img src="assets/placeholder.svg"></img>
-			</div>
-			<div id="go-block" class="block">
 			</div>
 		</div>
+
+		<div id="controls-area">
+			<div id="rope-connection">
+				<img src="assets/rope_2.svg"></img>
+				<span id="connection-status">
+				</span>
+			</div>
+			
+			<div class="available block piece f" data-command="f">
+				<img src="assets/f.svg"></img>
+			</div>
+			<div class="available block piece b" data-command="b">
+				<img src="assets/b.svg"></img>
+			</div>
+			<div class="available block piece l" data-command="l">
+				<img src="assets/l.svg"></img>
+			</div>
+			<div class="available block piece r" data-command="r">
+				<img src="assets/r.svg"></img>
+			</div>
+			
+			<div id="go-block" class="block">
+			</div>
+
+		</div>
+
 	</div>
 </body>
 
