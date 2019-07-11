@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "RoPE's hybrid programming interface",
   "scripts": {
-    "dev": "node-sass -W style/style.sass dist/style.css & npx webpack --watch",
+    "watch": "node-sass -w style/style.sass dist/style.css", 
+    "dev": "npx webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
