@@ -4,7 +4,7 @@
   "description": "RoPE's hybrid programming interface",
   "scripts": {
     "watch": "node-sass -w style/style.sass dist/style.css", 
-    "dev": "npx webpack --watch",
+    "dev": "npm run watch & npx webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

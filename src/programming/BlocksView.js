@@ -50,7 +50,7 @@ export default class BlocksView {
     }
 
     configureScrollListener() {
-        $(window).on('scroll', () => {
+        this.$placeholdersArea.on('scroll', () => {
             $('.ready.piece').hide() // because trembles on mobile when scroll
             clearTimeout($.data(this, 'scrollTimer'));
             $.data(this, 'scrollTimer', setTimeout(() => {
