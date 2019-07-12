@@ -35,7 +35,6 @@ var filesToCache = [
     'assets/l.svg',
     'assets/r_exit.svg',
     'assets/r.svg',
-    'assets/searching.svg',
     'assets/highlight.svg',
     'assets/next.wav',
     'mstile-150x150.png',
