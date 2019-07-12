@@ -1,36 +1,43 @@
 #connecting-view 
   background: #f2f2f2
   z-index: 6
+  width: 100%
+  height: 100vh
+  position: absolute
+  display: flex
+  flex-flow: column
+  align-items: center
 
 #bigger-rect-top
+  display: flex
+  align-items: center
   height: 60vh
-  display: table-cell
-  vertical-align: middle
-  width: 100vw
+  #searching
+    display: flex
+    flex-flow: column
+    margin-top: auto
+    div
+      position: relative
+      height: inherit
+      width: inherit
+      text-align: center
+      display: table-cell
+      vertical-align: middle
+      #magnifying
+        position: absolute
+        animation-name: fake-circle
+        animation-duration: 2s
+        animation-iteration-count: infinite
+        width: 30vh
+
 #smaller-rect-bottom
-  height: 37.5vh
   text-align: center
-.square
-  height: 50vh
-  width: 50vh
-  img
-    width: 100%
-    
-#searching
-  margin: 0 auto
-  div
-    position: relative
-    height: inherit
-    width: inherit
-    text-align: center
-    display: table-cell
-    vertical-align: middle
-  
-#magnifying
-  animation-name: fake-circle
-  animation-duration: 2s
-  animation-iteration-count: infinite
-  width: 30vh
+  width: 100%
+#magnifying-buttom
+  img.rope
+    width: 15vh
+  img.magnifying
+    width: 15vh
   
 @keyframes fake-circle
   from
