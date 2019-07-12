@@ -29,6 +29,7 @@ export default class BlocksView {
         this.createInitialPieces()
         this.createInitialPlaceholders()
         this.configureScrollListener()
+        this.preventRightClick()
     }
 
     createInitialPieces() {
@@ -61,6 +62,10 @@ export default class BlocksView {
                 this.highlightPiece.moveTo(placeholder)
             }, 450))
         })
+    }
+
+    preventRightClick() {
+        document.addEventListener('contextmenu', event => event.preventDefault());
     }
 
     clone($elm) {
