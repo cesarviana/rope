@@ -240,6 +240,9 @@ class App {
             navigator.serviceWorker
                 .register('service-worker.js').then(_ => {
                     console.log('Service Worker Registered')
+                }).catch(function(e){
+                    console.error(e)
+                    console.log(e)
                 })
         }
     }
