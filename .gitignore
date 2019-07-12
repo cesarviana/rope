@@ -7,4 +7,3 @@ package-lock.json
 **/*.sass-cache
 .vscode
 .idea
-dist
