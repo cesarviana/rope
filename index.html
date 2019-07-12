@@ -20,19 +20,21 @@
 <body>
 	<div name="connection screen" id="connecting-view" style="position: absolute">
 		<div id="bigger-rect-top">
-			<div id="searching" class="square center">
+			<div id="searching">
 				<div>
-					<div style="position:absolute; width: 100%">
-						<img name="magnifying" id="magnifying" src="assets/magnifying.svg" alt="lupa procurando o rope" style="margin-top: 40%; display: none">
-					</div>
-					<img id="rope" src="assets/rope.svg" alt="robozinho rope">
+					<img name="magnifying" id="magnifying" src="assets/magnifying.svg" alt="lupa procurando o rope" style="margin-top: 40%; display: none">
+					<img id="rope" src="assets/rope.svg" alt="robozinho rope" style="width: 100px">
+				</div>
+				<div style="top: -10px">
+					<img src="assets/rope_shadow.svg" alt="sombre_rope">
 				</div>
 			</div>
 		</div>
-		<div id="smaller-rect-bottom" class="area">
+		<div id="smaller-rect-bottom">
 			<hr>
 			<button id="magnifying-button" class="button large">
-				<img src="assets/rope_magnifying.svg" alt="botão para procurar o rope">
+				<img class="rope" src="assets/rope.svg" alt="botão para procurar o rope" style="width:50%">
+				<img class="magnifying" src="assets/magnifying.svg" alt="lupa para procurar o rope" style="width:45%">
 			</button>
 		</div>
 	</div>
@@ -65,7 +67,7 @@
 
 		<div id="controls-area">
 			<div id="rope-connection">
-				<img src="assets/rope_2.svg"></img>
+				<img src="assets/rope.svg"></img>
 				<span id="connection-status">
 				</span>
 			</div>
