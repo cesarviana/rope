@@ -1,5 +1,6 @@
 import RoPE from './rope/RoPEFake'
-import BlocksView from './programming/BlocksView'
+import BlocksView from './view/BlocksView'
+import { Command, CommandTypes } from './programming/Command'
 import $ from 'jquery'
 
 class App {
@@ -78,7 +79,7 @@ class App {
     {
         this.blocks.on('changed', pieces => 
         {
-            this.setPiecesCharacteristic(pieces)
+            this.onPiecesChanged(pieces)
         })
         this.blocks.on('click', index => 
         {
@@ -219,13 +220,15 @@ class App {
         this.resetProgrammingView()
     }
 
-    setPiecesCharacteristic(pieces) 
+    onPiecesChanged(pieces) 
     {
-        let commands = ''
+        let commands = []
         pieces.forEach(piece => {
-            commands += piece.$elm.attr('data-command')
+            const parameter = piece.$elm.attr('data-command')
+            const command = Command.create(CommandTypes.Keypad, parameter)
+            commands.push(command)
         })
-        this.rope.sendInstructions(commands)
+        this.rope.sendCommands(commands)
     }
 
     // util

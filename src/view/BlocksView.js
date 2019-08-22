@@ -50,17 +50,18 @@ export default class BlocksView {
     }
 
     configureScrollListener() {
-        this.$placeholdersArea.on('scroll', () => {
+        this.$placeholdersArea.on('scroll', (e) => {
+            console.log(e)
             $('.ready.piece').hide() // because trembles on mobile when scroll
             clearTimeout($.data(this, 'scrollTimer'));
-            $.data(this, 'scrollTimer', setTimeout(() => {
+            // $.data(this, 'scrollTimer', setTimeout(() => {
                 $('.ready.piece').show()
                 this.adjustPiecesToPlaceholders()
                 this.adjustAvailableReadyPieces()
                 this.updatePlaceholderElements()
                 const placeholder = this.getOccupedPlaceholders()[this.highlightPiece.index]
                 this.highlightPiece.moveTo(placeholder)
-            }, 450))
+            // }, 450))
         })
     }
 

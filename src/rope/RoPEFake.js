@@ -1,3 +1,5 @@
+import Compiler from '../programming/Compiler'
+
 export default class RoPE
 {
     constructor()
@@ -46,9 +48,11 @@ export default class RoPE
         this.onMessageCallbacks.push(callback)
     }
 
-    sendInstructions(instructions)
+    sendCommands(commands)
     {
-        console.log(instructions)
+        const compiler = new Compiler()
+        const characteristic = compiler.compile(commands)
+        console.log(characteristic)
     }
 
     clear()

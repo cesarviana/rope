@@ -1,3 +1,5 @@
+import Compiler from '../programming/Compiler'
+import { Command, CommandTypes } from './programming/Command'
 /**
  * RoPE.
  * He can be programmed!
@@ -9,6 +11,7 @@ export default class RoPE {
     constructor()
     {
         this.bluetooth = new Bluetooth();
+        this.compiler = new Compiler();
     }
 
     async search() {
@@ -33,12 +36,14 @@ export default class RoPE {
 
     async execute()
     {
-        await this.sendInstructions('e')
+        const executeCommand = Command.create(CommandTypes.Execute)
+        await this.sendCommands(executeCommand)
     }
 
     async clear()
     {
-        await this.sendInstructions('c')
+        const clearCommand = Command.create(CommandTypes.Clear)
+        await this.sendCommands(clearCommand)
     }
 
     onMessage(callback) 
@@ -46,9 +51,10 @@ export default class RoPE {
         this.bluetooth.on('characteristic-changed', callback)
     }
 
-    async sendInstructions(instructionsString) 
+    async sendCommands(commands) 
     {
-        this.bluetooth.setCharacteristic('cmds:'+instructionsString)
+        const characteristic = compiler.compile(commands)
+        this.bluetooth.setCharacteristic(characteristic)
     }
 
 }
