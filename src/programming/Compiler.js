@@ -6,7 +6,6 @@ export default class Compiler
         
         for(const command of commands)
         {
-            debugger
             const commandString = command.toString()
             program += commandString + '\n'
         }

@@ -174,7 +174,7 @@ eval("class Command\n{\n    static create(commandType, parameters)\n    {\n     
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Compiler; });\nclass Compiler \n{\n    compile(commands)\n    {\n        let program = 'BEGIN>>>\\n';\n        \n        for(const command of commands)\n        {\n            debugger\n            const commandString = command.toString()\n            program += commandString + '\\n'\n        }\n        \n        program += '<<<END' + '\\n'\n        \n        return program\n    }\n}\n\n//# sourceURL=webpack:///./src/programming/Compiler.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Compiler; });\nclass Compiler \n{\n    compile(commands)\n    {\n        let program = 'BEGIN>>>\\n';\n        \n        for(const command of commands)\n        {\n            const commandString = command.toString()\n            program += commandString + '\\n'\n        }\n        \n        program += '<<<END' + '\\n'\n        \n        return program\n    }\n}\n\n//# sourceURL=webpack:///./src/programming/Compiler.js?");
 
 /***/ }),
 
