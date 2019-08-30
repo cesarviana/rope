@@ -257,15 +257,3 @@ class App {
 const app = new App()
 app.registerServiceWorker()
 app.showProgrammingView()
-
-const commands = [];
-
-for(let i=0; i<2; i++)
-{
-    commands.push('FORWARD');
-    commands.push('BACKWARD');
-    commands.push('LEFT');
-    commands.push('RIGHT');
-}
-
-app.blocks.setCommands(commands)
