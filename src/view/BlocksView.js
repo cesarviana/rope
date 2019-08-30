@@ -206,7 +206,9 @@ export default class BlocksView {
     adjustPiecesToPlaceholders() {
         this.placeholders.forEach((placeholder) => {
             if (!placeholder.empty()) {
-                placeholder.internalRectangle.moveTo(placeholder)
+                placeholder.internalRectangle.moveTo(placeholder, {
+                    animationDuration: 0
+                })
             }
         })
     }

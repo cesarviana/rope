@@ -31,25 +31,28 @@ export default class Rectangle {
     getWidth(){
         return this.$elm.width()
     }
-    moveTo(obj) {
+    moveTo(obj, options) {
         if (obj instanceof Rectangle) {
             obj = obj.$elm
         }
         if (obj instanceof jQuery) {
             const x = obj.offset().left
             const y = obj.offset().top
-            this.moveToPoint(new Point(x, y))
+            this.moveToPoint(new Point(x, y), options)
         }
         if (obj instanceof Point) {
-            this.moveToPoint(obj)
+            this.moveToPoint(obj, options)
         }
     }
-    moveToPoint(point) {
+    moveToPoint(point, options) {
+
+        const opt = options || { animationDuration: 200 }
+
         this.moving = true
         this.$elm.animate({
             top: point.y,
             left: point.x
-        }, 200, function () {
+        }, opt.animationDuration, function () {
             this.moving = false
         })
     }
