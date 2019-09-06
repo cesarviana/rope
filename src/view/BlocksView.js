@@ -26,6 +26,10 @@ export default class BlocksView {
 
         this.callbacks = []
 
+        this.$placeholdersArea.on('mousemove', (e)=>{
+            this.cursor = new Point(e.clientX, e.clientY)
+        })
+
         this.createInitialPieces()
         this.createInitialPlaceholders()
         this.configureScrollListener()
@@ -55,9 +59,6 @@ export default class BlocksView {
             clearTimeout($.data(this, 'scrollTimer'));
             //$.data(this, 'scrollTimer', setTimeout(() => {
                 $('.ready.piece').show()
-                this.adjustPiecesToPlaceholders()
-                this.adjustAvailableReadyPieces()
-                this.updatePlaceholderElements()
                 const placeholder = this.getOccupedPlaceholders()[this.highlightPiece.index]
                 this.highlightPiece.moveTo(placeholder)
             //}, 450))
@@ -75,9 +76,7 @@ export default class BlocksView {
             .addClass('ready')
             .css({
                 position: 'absolute',
-                top: $elm.offset().top,
-                left: $elm.offset().left
-            })
+            }).css($elm.offset())
             .appendTo(this.$programmingView)
             .draggable({
                 start: (e) => this.handleDragStart(e),
@@ -85,6 +84,15 @@ export default class BlocksView {
                 drag: (e) => this.handleDrag(e),
                 scroll: false
             }).mouseup((e) => this.notifyClickedPiece(e))
+            // .mousedown(e=>
+            //     {
+            //         console.log('mousedown')
+            //         $(e.target).css({
+            //         position:'absolute',
+            //         left: this.cursor.x,
+            //         top: this.cursor.y
+            //     })
+            // })
 
         let id = ++this.idCounter
         $cloned.id = id
@@ -114,25 +122,18 @@ export default class BlocksView {
     }
 
     handleDragStart(e) {
+        console.log('drag start')
         this.startDragPiecesIds = this.getPiecesIdsString()
-        this.adjustAvailableReadyPieces()
         let movingPiece = this.getOrCreatePiece(e)
         
-        // startDragging
         const isSnaped = movingPiece.$elm.parent().hasClass('placeholder')
         if(isSnaped){
-            const parent = movingPiece.$elm.parent()
-            
-            // movingPiece.$elm.css({
-            //     // position: 'absolute',
-            //     top: parent.offset().top,
-            //     left: parent.offset().left
-            // })
             movingPiece.$elm.appendTo(this.$placeholdersArea)
-            
+            movingPiece.$elm.css({
+                position:'absolute'
+            }) 
         }
 
-        
         this.isTimeToSnap = false
         setTimeout(() => {
             this.isTimeToSnap = true
@@ -160,7 +161,6 @@ export default class BlocksView {
         }
         this.movePiecesToLeft()
         this.adjustAreaWidth()
-        this.adjustPiecesToPlaceholders()
         this.addRightPlaceholder()
         this.removeRemainingPlaceholders()
         this.notifyChangedPiecesIfChanged()
@@ -178,6 +178,7 @@ export default class BlocksView {
         const placeholdersRectangle = this.getPlaceholdersRectangle()
         if (placeholdersRectangle.contains(movingPiece.center())) {
             movingPiece.enteredPlaceholdersArea = true
+            movingPiece.$elm.appendTo(this.$placeholdersArea)
         }
     }
 
@@ -205,27 +206,6 @@ export default class BlocksView {
 
     getPlaceholdersRectangle() {
         return new Rectangle($('#placeholders-area'))
-    }
-
-    adjustAvailableReadyPieces() {
-        /** Ready pieces are available and not dragged.
-            This function adjusts this left position, relative to the document
-            because when scroll right they stay left **/
-        $('.ready.piece').each((idx, elm) => {
-            const command = $(elm).attr('data-command')
-            const originalElement = $('.available.' + command)
-            $(elm).css('left', originalElement.offset().left)
-        })
-    }
-
-    adjustPiecesToPlaceholders() {
-        this.placeholders.forEach((placeholder) => {
-            if (!placeholder.empty()) {
-                // placeholder.internalRectangle.moveTo(placeholder, {
-                //     animationDuration: 0
-                // })
-            }
-        })
     }
 
     organizePostionZ(piece) {
@@ -323,7 +303,6 @@ export default class BlocksView {
         const ocuppedPlaceholders = this.getOccupedPlaceholders()
         if (this.placeholders.length === ocuppedPlaceholders.length) {
             this.createPlaceholder(Rectangle.prototype.RIGHT)
-            this.adjustPiecesToPlaceholders()
         }
     }
     
@@ -331,7 +310,7 @@ export default class BlocksView {
         const $placeholderBase = $($('.placeholder')[0])
         const $placeholderClone = $placeholderBase.clone()
         $placeholderClone.empty()
-        
+
         const placeholder = new Rectangle($placeholderClone)
         if (side === Rectangle.prototype.LEFT) {
             this.$placeholdersArea.prepend($placeholderClone)
@@ -350,7 +329,6 @@ export default class BlocksView {
         while (this.placeholders.length > ocupped + 3) {
             this.placeholders.pop()
             $('.placeholder').last().remove()
-            // this.adjustPiecesToPlaceholders()
         }
         this.updatePlaceholderElements()
     }
@@ -364,7 +342,6 @@ export default class BlocksView {
     getOrCreatePlaceholder(side, placeholderIndex) {
         if (!this.placeholders[placeholderIndex + side]) {
             let newPlacehoder = this.createPlaceholder(side)
-            // this.adjustPiecesToPlaceholders()
             return newPlacehoder
         }
         return this.placeholders[placeholderIndex + side]

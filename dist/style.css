@@ -155,9 +155,9 @@ button:active {
 #programming-view #placeholders-area-wrapper {
   flex-grow: 1;
   display: flex;
-  overflow-x: scroll;
-  border: 10px solid red; }
+  overflow-x: scroll; }
   #programming-view #placeholders-area-wrapper #placeholders-area {
+    position: relative;
     box-sizing: border-box;
     background: #fcf9ee;
     width: 100%; }
