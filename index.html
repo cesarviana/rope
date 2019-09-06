@@ -18,7 +18,7 @@
 </head>
 
 <body>
-	<div name="connection screen" id="connecting-view" style="position: absolute">
+	<div name="connection screen" id="connecting-view" style="position: absolute; display: none">
 		<div id="bigger-rect-top">
 			<div id="searching">
 				<div>
@@ -53,15 +53,11 @@
 			<img src="assets/highlight.svg" alt="Destaque sobre a peça que está sendo executada">
 		</div>
 
-		<div id="placeholders-area" class="centered-content debug">
-			<div class="block placeholder">
-				<img src="assets/placeholder.svg"></img>
-			</div>
-			<div class="block placeholder">
-				<img src="assets/placeholder.svg"></img>
-			</div>
-			<div class="block placeholder">
-				<img src="assets/placeholder.svg"></img>
+		<div id="placeholders-area-wrapper">
+			<div id="placeholders-area" class="centered-content debug">
+				<div class="block placeholder"></div>
+				<div class="block placeholder"></div>
+				<div class="block placeholder"></div>
 			</div>
 		</div>
 

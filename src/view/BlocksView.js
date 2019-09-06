@@ -51,17 +51,16 @@ export default class BlocksView {
 
     configureScrollListener() {
         this.$placeholdersArea.on('scroll', (e) => {
-            console.log(e)
             $('.ready.piece').hide() // because trembles on mobile when scroll
             clearTimeout($.data(this, 'scrollTimer'));
-            // $.data(this, 'scrollTimer', setTimeout(() => {
+            //$.data(this, 'scrollTimer', setTimeout(() => {
                 $('.ready.piece').show()
                 this.adjustPiecesToPlaceholders()
                 this.adjustAvailableReadyPieces()
                 this.updatePlaceholderElements()
                 const placeholder = this.getOccupedPlaceholders()[this.highlightPiece.index]
                 this.highlightPiece.moveTo(placeholder)
-            // }, 450))
+            //}, 450))
         })
     }
 
@@ -118,6 +117,22 @@ export default class BlocksView {
         this.startDragPiecesIds = this.getPiecesIdsString()
         this.adjustAvailableReadyPieces()
         let movingPiece = this.getOrCreatePiece(e)
+        
+        // startDragging
+        const isSnaped = movingPiece.$elm.parent().hasClass('placeholder')
+        if(isSnaped){
+            const parent = movingPiece.$elm.parent()
+            
+            // movingPiece.$elm.css({
+            //     // position: 'absolute',
+            //     top: parent.offset().top,
+            //     left: parent.offset().left
+            // })
+            movingPiece.$elm.appendTo(this.$placeholdersArea)
+            
+        }
+
+        
         this.isTimeToSnap = false
         setTimeout(() => {
             this.isTimeToSnap = true
@@ -206,9 +221,9 @@ export default class BlocksView {
     adjustPiecesToPlaceholders() {
         this.placeholders.forEach((placeholder) => {
             if (!placeholder.empty()) {
-                placeholder.internalRectangle.moveTo(placeholder, {
-                    animationDuration: 0
-                })
+                // placeholder.internalRectangle.moveTo(placeholder, {
+                //     animationDuration: 0
+                // })
             }
         })
     }
@@ -249,11 +264,11 @@ export default class BlocksView {
     }
 
     adjustAreaWidth() {
-        const PIECE_SIZE = 50
+        const PIECE_SIZE = 70
         const SCREEN_WIDTH = $(window).width()
-        const snapedPiecesNumber = this.getOccupedPlaceholders().length
-        const newWidth = snapedPiecesNumber * PIECE_SIZE + PIECE_SIZE + PIECE_SIZE + PIECE_SIZE
-        this.$placeholdersArea.css('width', newWidth < SCREEN_WIDTH ? SCREEN_WIDTH : newWidth)
+        const padding = PIECE_SIZE
+        const newWidth = (this.placeholders.length * PIECE_SIZE) + padding
+        this.$placeholdersArea.css('min-width', newWidth < SCREEN_WIDTH ? SCREEN_WIDTH : newWidth)
     }
 
     getOccupedPlaceholders() {
@@ -295,7 +310,12 @@ export default class BlocksView {
 
     snap(placeholder, piece) {
         placeholder.add(piece)
-        piece.moveTo(placeholder)
+        placeholder.$elm.append(piece.$elm)
+        piece.$elm.css({
+            position:'relative',
+            top: 0,
+            left: 0
+        })
         audio.play()
     }
 
@@ -306,21 +326,13 @@ export default class BlocksView {
             this.adjustPiecesToPlaceholders()
         }
     }
-
-    removeRemainingPlaceholders() {
-        let ocupped = this.getOccupedPlaceholders().length
-        while (this.placeholders.length > ocupped + 3) {
-            this.placeholders.pop()
-            $('.placeholder').last().remove()
-            this.adjustPiecesToPlaceholders()
-        }
-        this.updatePlaceholderElements()
-    }
-
+    
     createPlaceholder(side) {
-        let $placeholderBase = $($('.placeholder')[0])
-        let $placeholderClone = $placeholderBase.clone()
-        let placeholder = new Rectangle($placeholderClone)
+        const $placeholderBase = $($('.placeholder')[0])
+        const $placeholderClone = $placeholderBase.clone()
+        $placeholderClone.empty()
+        
+        const placeholder = new Rectangle($placeholderClone)
         if (side === Rectangle.prototype.LEFT) {
             this.$placeholdersArea.prepend($placeholderClone)
             this.placeholders.unshift(placeholder)
@@ -328,10 +340,21 @@ export default class BlocksView {
             this.$placeholdersArea.append($placeholderClone)
             this.placeholders.push(placeholder)
         }
+        this.adjustAreaWidth()
         this.updatePlaceholderElements()
         return placeholder
     }
 
+    removeRemainingPlaceholders() {
+        let ocupped = this.getOccupedPlaceholders().length
+        while (this.placeholders.length > ocupped + 3) {
+            this.placeholders.pop()
+            $('.placeholder').last().remove()
+            // this.adjustPiecesToPlaceholders()
+        }
+        this.updatePlaceholderElements()
+    }
+    
     updatePlaceholderElements() {
         $('.block.placeholder').each((idx, elm) => {
             this.placeholders[idx].setElm($(elm))
@@ -341,7 +364,7 @@ export default class BlocksView {
     getOrCreatePlaceholder(side, placeholderIndex) {
         if (!this.placeholders[placeholderIndex + side]) {
             let newPlacehoder = this.createPlaceholder(side)
-            this.adjustPiecesToPlaceholders()
+            // this.adjustPiecesToPlaceholders()
             return newPlacehoder
         }
         return this.placeholders[placeholderIndex + side]
@@ -427,8 +450,6 @@ export default class BlocksView {
             commands.forEach((command) => this.addPieceFrom(command))
         }
 
-        this.adjustAreaWidth()
-        this.adjustPiecesToPlaceholders()
         this.getSnappedPieces().forEach(p=>p.setDragged())
     }
 
@@ -445,12 +466,14 @@ export default class BlocksView {
     }
 
     addPieceFrom(command) {
+        this.addRightPlaceholder()
+
         const piece = this.cloneAndCreatePiece($('.available.piece.' + command))
         const placeholder = this.getFreePlaceholders()[0]
-        piece.moveTo(placeholder)
+        
         this.snap(placeholder, piece)
+
         this.movePiecesToLeft()
-        this.addRightPlaceholder()
     }
 
     removeSnappedPieces() {

@@ -85,6 +85,7 @@ export default class Rectangle {
     }
     frees() {
         this.internalRectangle = undefined
+        this.$elm.empty()
     }
 }
 Rectangle.prototype.LEFT = -1
