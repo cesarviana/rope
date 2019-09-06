@@ -74,25 +74,15 @@ export default class BlocksView {
         $cloned
             .removeClass('available')
             .addClass('ready')
-            .css({
-                position: 'absolute',
-            }).css($elm.offset())
+            .css('position', 'absolute').css($elm.offset())
             .appendTo(this.$programmingView)
             .draggable({
                 start: (e) => this.handleDragStart(e),
                 stop: (e) => this.handleDragStop(e),
                 drag: (e) => this.handleDrag(e),
                 scroll: false
-            }).mouseup((e) => this.notifyClickedPiece(e))
-            // .mousedown(e=>
-            //     {
-            //         console.log('mousedown')
-            //         $(e.target).css({
-            //         position:'absolute',
-            //         left: this.cursor.x,
-            //         top: this.cursor.y
-            //     })
-            // })
+            }).mouseup(this.notifyClickedPiece)
+            .mousedown((e)=>this.changeStartDraggingPosition(e))
 
         let id = ++this.idCounter
         $cloned.id = id
@@ -122,16 +112,12 @@ export default class BlocksView {
     }
 
     handleDragStart(e) {
-        console.log('drag start')
         this.startDragPiecesIds = this.getPiecesIdsString()
         let movingPiece = this.getOrCreatePiece(e)
         
         const isSnaped = movingPiece.$elm.parent().hasClass('placeholder')
         if(isSnaped){
             movingPiece.$elm.appendTo(this.$placeholdersArea)
-            movingPiece.$elm.css({
-                position:'absolute'
-            }) 
         }
 
         this.isTimeToSnap = false
@@ -290,12 +276,6 @@ export default class BlocksView {
 
     snap(placeholder, piece) {
         placeholder.add(piece)
-        placeholder.$elm.append(piece.$elm)
-        piece.$elm.css({
-            position:'relative',
-            top: 0,
-            left: 0
-        })
         audio.play()
     }
 
@@ -522,6 +502,18 @@ export default class BlocksView {
         this.notify('click', clickedIndex)
     }
 
+    changeStartDraggingPosition(e) {
+        const $elm = $(e.currentTarget)
+        const scroll = $('html').scrollLeft()
+        const left = $elm.offset().left + scroll
+        const top = $elm.offset().top
+        $elm.css({
+            position: 'absolute',
+            left,
+            top
+        })
+    }
+
     pointToIndex(index) {
         const placeholder = this.getOccupedPlaceholders()[index]
         if (!placeholder) return
@@ -535,6 +527,7 @@ export default class BlocksView {
     }
 
     scrollToShow(rectangle) {
+        debugger
         const scroll = $('html').scrollLeft()
         const maxX = rectangle.getX() + rectangle.getWidth()
         const windowWidth = $(window).width()

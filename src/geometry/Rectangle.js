@@ -78,6 +78,12 @@ export default class Rectangle {
         return !this.internalRectangle
     }
     add(obj) {
+        this.$elm.append(obj.$elm)
+        obj.$elm.css({
+            position:'relative',
+            top: 0,
+            left: 0
+        })
         return this.internalRectangle = obj
     }
     has(obj) {
