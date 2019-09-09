@@ -166,7 +166,7 @@ button:active {
   #programming-view #placeholders-area-wrapper .placeholder {
     border: 1px solid gray; }
   #programming-view #placeholders-area-wrapper .freed {
-    background: gray; }
+    border: 3px solid blue; }
 
 #programming-view #pointer {
   position: absolute;

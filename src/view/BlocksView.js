@@ -99,6 +99,8 @@ export default class BlocksView {
     }
 
     handleDragStart(e) {
+
+        // this.updatePiecesElements()
         
         this.startDragPiecesIds = this.getPiecesIdsString()
         
@@ -122,7 +124,7 @@ export default class BlocksView {
         movingPiece.setDragged()
         this.moveSnapedPieceIfIsTimeToSnap(movingPiece)
         // this.setPieceEnteredPlaceholdersArea(movingPiece)
-        // this.addOrRemoveOutsideBorder(movingPiece)
+        this.addOrRemoveOutsideBorder(movingPiece)
     }
 
     handleDragStop(e) {
@@ -156,7 +158,7 @@ export default class BlocksView {
 
     setPieceEnteredPlaceholdersArea(movingPiece) {
         const placeholdersRectangle = this.getPlaceholdersRectangle()
-        if (placeholdersRectangle.contains(movingPiece.center())) {
+        if (placeholdersRectangle.contains(movingPiece.center(this.scroll))) {
             movingPiece.enteredPlaceholdersArea = true
         }
     }
@@ -238,30 +240,12 @@ export default class BlocksView {
     }
 
     freesPlaceholder(movingPiece) {
-        // movingPiece.$elm.css('border','2px solid red')
-        // console.log(this.getFreePlaceholders())
-        //this.getOccupedPlaceholders().forEach(placeholder=>placeholder.internalRectangle.$elm)
-        // this.getOccupedPlaceholders().forEach(p => {
-        //     console.log(p.internalRectangle)
-        //     if(p.internalRectangle.$elm === movingPiece.$elm){
-        //         console.log('hehr')
-        //     }
-        // })
-        // this.placeholders.forEach(placeholder => placeholder.$elm.css('border: 2px solid red'))
-        // debugger
         this.placeholders.forEach(placeholder => {
             if(placeholder.has(movingPiece))
             {
                 placeholder.frees()
             }
         });
-        // if (freedPlaceholder) {
-        //     freedPlaceholder.frees()
-        // }
-        // this.placeholders.forEach(placeholder=>{
-        //     placeholder.frees()
-        // })
-        
     }
 
     remove(piece) {
@@ -280,7 +264,9 @@ export default class BlocksView {
     }
 
     getOveredPlaceholder(piece){
-        return this.placeholders.find(placeholder => placeholder.contains(piece))
+        let center = piece.center()
+        console.log(center)
+        return this.placeholders.find(placeholder => placeholder.contains(center))
     }
 
     isOverPlaceholder(piece){
@@ -290,10 +276,10 @@ export default class BlocksView {
     snap(placeholder, piece) {
         placeholder.add(piece)
         audio.play()
-        this.placeholders.forEach((p)=>{
-            console.log(p)
-        })
-        console.log('-----')
+        // this.placeholders.forEach((p)=>{
+        //     console.log(p)
+        // })
+        // console.log('-----')
     }
 
     addRightPlaceholder() {
@@ -345,7 +331,7 @@ export default class BlocksView {
         {
             // debugger
             elements.each((idx, elm) => {
-                this.pieces[idx].setElm($(elm))
+                this.pieces[idx].setElm($(elm), this.scroll)
             })
         }
     }
@@ -370,7 +356,7 @@ export default class BlocksView {
     }
 
     ifHasPieceThenMove(placeholder, placeholderIndex, movingPiece) {
-        if (!placeholder.empty() && placeholder.contains(movingPiece.center())) {
+        if (!placeholder.empty() && placeholder.contains(movingPiece.center(this.scroll))) {
             let moveSide = this.calcMoveSide(placeholder, placeholderIndex, movingPiece)
             this.movePlaceholderPiece(placeholder, moveSide)
         }
@@ -453,13 +439,12 @@ export default class BlocksView {
     }
 
     addPieceFrom(command) {
-        this.addRightPlaceholder()
-
         const piece = this.cloneAndCreatePiece($('.available.piece.' + command))
         const placeholder = this.getFreePlaceholders()[0]
         
         this.snap(placeholder, piece)
 
+        this.addRightPlaceholder()
         this.movePiecesToLeft()
     }
 

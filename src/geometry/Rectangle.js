@@ -4,12 +4,12 @@ export default class Rectangle {
     {
         this.setElm($elm)
     }
-    setElm($elm) {
+    setElm($elm, horizontalScroll) {
         this.$elm = $elm
         this.height = $elm.height()
         this.width = $elm.width()
         this.y = $elm.offset().top
-        this.x = $elm.offset().left
+        this.x = $elm.offset().left + (horizontalScroll || 0)
     }
     contains(obj) {
         if (obj instanceof Point) {
@@ -22,8 +22,8 @@ export default class Rectangle {
             return this.contains(obj.center())
         }
     }
-    center() {
-        let centerX = this.x + (this.width / 2)
+    center(horizontalScroll) {
+        let centerX = this.x + (horizontalScroll || 0) + (this.width / 2)
         let centerY = this.y + (this.height / 2)
         return new Point(centerX, centerY)
     }
