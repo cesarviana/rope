@@ -265,7 +265,6 @@ export default class BlocksView {
 
     getOveredPlaceholder(piece){
         let center = piece.center()
-        console.log(center)
         return this.placeholders.find(placeholder => placeholder.contains(center))
     }
 

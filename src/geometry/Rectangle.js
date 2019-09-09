@@ -84,7 +84,9 @@ export default class Rectangle {
     }
     add(obj) {
         this.$elm.append(obj.$elm).removeClass('freed')
-        obj.$elm.css({ position:'relative', top: 0, left: 0 })
+        // obj.moveTo(this, {}, function(){
+            obj.$elm.css({ position:'relative', top: 0, left: 0 })
+        // })
         return this.internalRectangle = obj
     }
     has(obj) {
