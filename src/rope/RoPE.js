@@ -1,5 +1,5 @@
 import Compiler from '../programming/Compiler'
-import { Command, CommandTypes } from './programming/Command'
+import { Command, CommandTypes } from '../programming/Command'
 /**
  * RoPE.
  * He can be programmed!
@@ -53,7 +53,7 @@ export default class RoPE {
 
     async sendCommands(commands) 
     {
-        const characteristic = compiler.compile(commands)
+        const characteristic = this.compiler.compile(commands)
         this.bluetooth.setCharacteristic(characteristic)
     }
 

@@ -1,5 +1,5 @@
-import RoPE from './rope/RoPEFake'
-import BlocksView from './view/BlocksView'
+import RoPE from './rope/RoPE'
+import BlocksView from './view/BlocksView' 
 import { Command, CommandTypes } from './programming/Command'
 import $ from 'jquery'
 
@@ -256,9 +256,9 @@ class App {
 
 const app = new App()
 app.registerServiceWorker()
-app.showProgrammingView()
+//app.showProgrammingView()
 
-const commands = [];
+//const commands = [];
 
 // for(let i=0; i<3; i++) {
 //     commands.push('FORWARD');
