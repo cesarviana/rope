@@ -165,6 +165,8 @@ button:active {
     background-color: #eeffaa; }
   #programming-view #placeholders-area-wrapper .placeholder {
     border: 1px solid gray; }
+  #programming-view #placeholders-area-wrapper .freed {
+    background: gray; }
 
 #programming-view #pointer {
   position: absolute;

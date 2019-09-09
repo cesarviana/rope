@@ -52,7 +52,7 @@ export default class RoPE
     {
         const compiler = new Compiler()
         const characteristic = compiler.compile(commands)
-        console.log(characteristic)
+        // console.log(characteristic)
     }
 
     clear()

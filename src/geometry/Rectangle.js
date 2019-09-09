@@ -18,6 +18,8 @@ export default class Rectangle {
                 this.y + this.height >= point.y &&
                 this.x <= point.x &&
                 this.x + this.width >= point.x
+        } else if(obj instanceof Rectangle) {
+            return this.contains(obj.center())
         }
     }
     center() {
@@ -31,20 +33,20 @@ export default class Rectangle {
     getWidth(){
         return this.$elm.width()
     }
-    moveTo(obj, options) {
+    moveTo(obj, options, callback) {
         if (obj instanceof Rectangle) {
             obj = obj.$elm
         }
         if (obj instanceof jQuery) {
             const x = obj.offset().left
             const y = obj.offset().top
-            this.moveToPoint(new Point(x, y), options)
+            this.moveToPoint(new Point(x, y), options, callback)
         }
         if (obj instanceof Point) {
-            this.moveToPoint(obj, options)
+            this.moveToPoint(obj, options, callback)
         }
     }
-    moveToPoint(point, options) {
+    moveToPoint(point, options, callback) {
 
         const opt = options || { animationDuration: 200 }
 
@@ -53,7 +55,8 @@ export default class Rectangle {
             top: point.y,
             left: point.x
         }, opt.animationDuration, function () {
-            this.moving = false
+            this.moving = false,
+            callback.call(this)
         })
     }
     sideOf(obj) {
@@ -65,11 +68,13 @@ export default class Rectangle {
         return this.$elm[0].id
     }
     setDragged() {
-        this.dragged = true
         this.$elm
             .addClass('dragged')
             .removeClass('ready')
             .css({ 'z-index': 1000 })
+    }
+    dragged(){
+        return this.$elm.hasClass('dragged')
     }
     disappear() {
         this.$elm.fadeOut(200, () => this.$elm.remove())
@@ -78,20 +83,19 @@ export default class Rectangle {
         return !this.internalRectangle
     }
     add(obj) {
-        this.$elm.append(obj.$elm)
-        obj.$elm.css({
-            position:'relative',
-            top: 0,
-            left: 0
-        })
+        this.$elm.append(obj.$elm).removeClass('freed')
+        obj.$elm.css({ position:'relative', top: 0, left: 0 })
         return this.internalRectangle = obj
     }
     has(obj) {
         return obj === this.internalRectangle
     }
     frees() {
+        this.$elm.addClass('freed')
         this.internalRectangle = undefined
-        this.$elm.empty()
+    }
+    toString(){
+        return this.internalRectangle ? this.internalRectangle.id : 'vazio'
     }
 }
 Rectangle.prototype.LEFT = -1
