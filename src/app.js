@@ -234,43 +234,7 @@ class App {
     async onPiecesChanged(pieces) 
     {
         const commands = this.piecesToCommands(pieces)
-        
-        if(this.newComandIsLast(commands))
-        {
-            const lastCommand = commands[commands.length - 1]
-            this.rope.sendCommands( [lastCommand] )
-        } 
-        else 
-        {
-            const clear = Command.create(CommandTypes.Clear)
-            this.rope.sendCommands([clear])
-            this.rope.sendCommands(commands)
-        }
-
-        this.lastCommands = commands
-    }
-
-    newComandIsLast(commands) {
-        if(this.lastCommands === undefined)
-        {
-            return false
-        }
-        // last size must be one smaller than actual size
-        const incoherentSize = this.lastCommands.length + 1 !== commands.length
-        if(incoherentSize)
-        {
-            return false
-        }
-
-        for(let i=0; i<this.lastCommands.length; i++)
-        {
-            if(this.lastCommands[i].toString() !== commands[i].toString())
-            {
-                return false
-            }
-        }
-
-        return true
+        this.rope.sendCommands(commands)
     }
 
     // util
