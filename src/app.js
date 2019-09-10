@@ -1,6 +1,6 @@
-import RoPE from './rope/RoPE'
+import RoPE from './rope/RoPEFake'
 import BlocksView from './view/BlocksView' 
-import { Command, CommandTypes } from './programming/Command'
+import { Command, CommandTypes, Commands } from './programming/Command'
 import $ from 'jquery'
 
 class App {
@@ -234,6 +234,17 @@ class App {
     async onPiecesChanged(pieces) 
     {
         const commands = this.piecesToCommands(pieces)
+        
+        if(commands.length >= 1){
+            commands.unshift(Commands.BuzzerOff)
+        }
+
+        commands.unshift(Commands.Clear)
+
+        if(commands.length > 2){
+            commands.splice(commands.length - 1, 0, Commands.BuzzerOn)
+        }
+        
         this.rope.sendCommands(commands)
     }
 

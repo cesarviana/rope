@@ -15,7 +15,19 @@ class Command
     {
         const parametersString = this.getParametersString()
         const separator = parametersString ? ': ' : ''
-        return `${this.commandType}${separator}${parametersString}`
+        // return `${this.commandType}${separator}${parametersString}`
+        if(!separator)
+        {
+            return this.commandType.toLowerCase()[0]
+        } else 
+        {
+            if(this.commandType === CommandTypes.Keypad)
+            {
+                return parametersString.toLowerCase()[0]
+            } else {
+                return parametersString[0]
+            }
+        }
     }
 
     getParametersString() {
@@ -35,6 +47,13 @@ const CommandTypes =
     Buzzer: 'BUZZER'
 }
 
+const Commands = {
+    Clear: Command.create(CommandTypes.Clear),
+    BuzzerOn: Command.create(CommandTypes.BuzzerOn, 'S'),
+    BuzzerOff: Command.create(CommandTypes.BuzzerOn, 's'),
+    Execute: Command.create(CommandTypes.Clear)
+}
+
 module.exports = {
-    Command, CommandTypes
+    Command, CommandTypes, Commands
 }
