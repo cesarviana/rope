@@ -1,4 +1,4 @@
-import RoPE from './rope/RoPE'
+import RoPE from './rope/RoPEFake'
 import BlocksView from './view/BlocksView' 
 import { Command, CommandTypes } from './programming/Command'
 import $ from 'jquery'
@@ -220,29 +220,37 @@ class App {
         this.resetProgrammingView()
     }
 
-    onPiecesChanged(pieces) 
+    piecesToCommands(pieces)
     {
-        let commands = []
+        const commands = []
         pieces.forEach(piece => {
             const parameter = piece.$elm.attr('data-command')
             const command = Command.create(CommandTypes.Keypad, parameter)
             commands.push(command)
         })
+        return commands
+    }
+
+    async onPiecesChanged(pieces) 
+    {
+        const commands = this.piecesToCommands(pieces)
         
-        if(this.addedOnEnd(commands))
+        if(this.newComandIsLast(commands))
         {
             const lastCommand = commands[commands.length - 1]
             this.rope.sendCommands( [lastCommand] )
         } 
         else 
         {
+            const clear = Command.create(CommandTypes.Clear)
+            this.rope.sendCommands([clear])
             this.rope.sendCommands(commands)
         }
 
         this.lastCommands = commands
     }
 
-    addedOnEnd(commands) {
+    newComandIsLast(commands) {
         if(this.lastCommands === undefined)
         {
             return false
