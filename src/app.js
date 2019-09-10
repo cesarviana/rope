@@ -228,7 +228,41 @@ class App {
             const command = Command.create(CommandTypes.Keypad, parameter)
             commands.push(command)
         })
-        this.rope.sendCommands(commands)
+        
+        if(this.addedOnEnd(commands))
+        {
+            const lastCommand = commands[commands.length - 1]
+            this.rope.sendCommands( [lastCommand] )
+        } 
+        else 
+        {
+            this.rope.sendCommands(commands)
+        }
+
+        this.lastCommands = commands
+    }
+
+    addedOnEnd(commands) {
+        if(this.lastCommands === undefined)
+        {
+            return false
+        }
+        // last size must be one smaller than actual size
+        const incoherentSize = this.lastCommands.length + 1 !== commands.length
+        if(incoherentSize)
+        {
+            return false
+        }
+
+        for(let i=0; i<this.lastCommands.length; i++)
+        {
+            if(this.lastCommands[i].toString() !== commands[i].toString())
+            {
+                return false
+            }
+        }
+
+        return true
     }
 
     // util
