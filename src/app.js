@@ -249,22 +249,18 @@ class App {
 
     addTestBlocks()
     {
-        this.blocks.setCommands('ffffffff');
+        const commands = [];
+        for(let i=0; i<3; i++) 
+        {
+            commands.push('FORWARD');
+            commands.push('BACKWARD');
+            commands.push('LEFT');
+            commands.push('RIGHT');
+        }
+        this.blocks.setCommands(commands);
     }
 
 }
 
 const app = new App()
 app.registerServiceWorker()
-//app.showProgrammingView()
-
-//const commands = [];
-
-// for(let i=0; i<3; i++) {
-//     commands.push('FORWARD');
-//     commands.push('BACKWARD');
-//     commands.push('LEFT');
-//     commands.push('RIGHT');
-// }
-
-// app.blocks.setCommands(commands)

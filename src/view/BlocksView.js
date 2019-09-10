@@ -275,10 +275,6 @@ export default class BlocksView {
     snap(placeholder, piece) {
         placeholder.add(piece)
         audio.play()
-        // this.placeholders.forEach((p)=>{
-        //     console.log(p)
-        // })
-        // console.log('-----')
     }
 
     addRightPlaceholder() {
