@@ -1,4 +1,4 @@
-import RoPE from './rope/RoPE'
+import RoPE from './rope/RoPEFake'
 import BlocksView from './view/BlocksView' 
 import { Command, CommandTypes, Commands } from './programming/Command'
 import $ from 'jquery'

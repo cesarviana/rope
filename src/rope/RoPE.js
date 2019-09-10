@@ -57,7 +57,7 @@ export default class RoPE {
         setTimeout(()=>{
             const characteristic = this.compiler.compile(commands)
             this.bluetooth.setCharacteristic(characteristic)
-        }, 100)
+        }, 10)
     }
 
 }
