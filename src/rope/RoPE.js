@@ -37,7 +37,7 @@ export default class RoPE {
     async execute()
     {
         const executeCommand = Command.create(CommandTypes.Execute)
-        await this.sendCommands(executeCommand)
+        await this.sendCommands([executeCommand])
     }
 
     async clear()

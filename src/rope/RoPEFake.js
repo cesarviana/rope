@@ -1,4 +1,5 @@
 import Compiler from '../programming/Compiler'
+import { Command, CommandTypes } from '../programming/Command'
 
 export default class RoPE
 {
@@ -7,6 +8,7 @@ export default class RoPE
         this.onConnectedCallbacks = []
         this.onConnectionFailedCallbacks = []
         this.onMessageCallbacks = []
+        this.compiler = new Compiler()
     }
     
     search()
@@ -50,8 +52,7 @@ export default class RoPE
 
     sendCommands(commands)
     {
-        const compiler = new Compiler()
-        const characteristic = compiler.compile(commands)
+        const characteristic = this.compiler.compile(commands)
         console.log(characteristic)
     }
 
@@ -59,8 +60,9 @@ export default class RoPE
     {
     }
 
-    execute()
+    async execute()
     {
-        console.log('RoPE: Execute')
+        const executeCommand = Command.create(CommandTypes.Execute)
+        await this.sendCommands([executeCommand])
     }
 }
