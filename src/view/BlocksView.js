@@ -100,8 +100,6 @@ export default class BlocksView {
 
     handleDragStart(e) {
 
-        // this.updatePiecesElements()
-        
         this.startDragPiecesIds = this.getPiecesIdsString()
         
         let movingPiece = this.getOrCreatePiece(e)
@@ -143,9 +141,11 @@ export default class BlocksView {
 
         this.movePiecesToLeft()
         this.adjustAreaWidth()
-        this.addRightPlaceholder()
-        this.removeRemainingPlaceholders()
+        this.adjustPlaceholders()
         this.notifyChangedPiecesIfChanged()
+        this.getOccupedPlaceholders().forEach(placeholder=>{
+            placeholder.internalRectangle.moveTo(placeholder)
+        })
     }
 
     getPiecesIdsString(){
@@ -225,6 +225,14 @@ export default class BlocksView {
         const padding = PIECE_SIZE
         const newWidth = (this.placeholders.length * PIECE_SIZE) + padding
         this.$placeholdersArea.css('min-width', newWidth < SCREEN_WIDTH ? SCREEN_WIDTH : newWidth)
+    }
+
+    adjustPlaceholders()
+    {
+        this.addRightPlaceholder()
+        this.removeRemainingPlaceholders()
+        $('.placeholder').css('padding-right', 0)
+        $('.placeholder').last().css('padding-right','25px')
     }
 
     getOccupedPlaceholders() {
@@ -528,7 +536,8 @@ export default class BlocksView {
         }
     }
 
-    pointToIndex(index) {
+    pointToIndex(index) 
+    {
         const placeholder = this.getOccupedPlaceholders()[index]
         if (!placeholder) return
         const x = placeholder.getX()
@@ -540,8 +549,8 @@ export default class BlocksView {
         this.scrollToShow(placeholder)
     }
 
-    scrollToShow(rectangle) {
-        debugger
+    scrollToShow(rectangle) 
+    {
         const scroll = $('html').scrollLeft()
         const maxX = rectangle.getX() + rectangle.getWidth()
         const windowWidth = $(window).width()

@@ -52,6 +52,7 @@ export default class RoPE
 
     sendCommands(commands)
     {
+        this.commands = commands
         const characteristic = this.compiler.compile(commands)
         console.log(characteristic)
     }
@@ -62,7 +63,15 @@ export default class RoPE
 
     async execute()
     {
-        const executeCommand = Command.create(CommandTypes.Execute)
-        await this.sendCommands([executeCommand])
+        this.sendCommands(this.commands)
+        //const executeCommand = Command.create(CommandTypes.Execute)
+        // await this.sendCommands([executeCommand])
+        this.commands.filter(command=>command.commandType === CommandTypes.Keypad)
+            .forEach((command, index)=>{
+            this.onMessageCallbacks.forEach(callback=>{
+                callback.call(this, index)
+            })
+        })
+        
     }
 }

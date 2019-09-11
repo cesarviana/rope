@@ -72,7 +72,7 @@ class App {
             this.showDisconnected()
             this.showConnectionView()
         })
-        this.rope.onMessage(this.handleMessage)
+        this.rope.onMessage((message)=>this.handleMessage(message))
     }
 
     setBlocksEventListeners()
@@ -187,7 +187,6 @@ class App {
 
     showShadow()
     {
-        this.sounds.start.play()
         if (!$('#shadow').length) {
             $('<div id="shadow"></div>').css({
                 width: '100%',
@@ -199,9 +198,7 @@ class App {
                 display: 'none'
             }).prependTo($('#programming-view'))
         }
-
         $('#shadow').fadeIn(400, 'linear')
-        this.blocks.highlightSnapped()
     }
 
     // dealing with the model
@@ -246,6 +243,31 @@ class App {
         }
         
         this.rope.sendCommands(commands)
+    }
+
+    handleMessage(message)
+    {
+        if(message.indexOf(':') !== -1)
+        {
+            const parts = message.split(':')
+            const instruction = parts[0]
+            const parameter = parts[1]
+
+            switch(instruction){
+                case 'executed':
+                    this.showShadow()
+                    this.blocks.highlight({index})
+                   break;
+                case 'program':
+                    if(parameter === 'started'){
+                        this.showShadow()
+                    } else {
+                        this.hideShadow()
+                        this.blocks.hideHighlight()
+                    }
+                    break;
+            }
+        }
     }
 
     // util

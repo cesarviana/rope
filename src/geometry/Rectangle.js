@@ -4,12 +4,12 @@ export default class Rectangle {
     {
         this.setElm($elm)
     }
-    setElm($elm, horizontalScroll) {
+    setElm($elm) {
         this.$elm = $elm
         this.height = $elm.height()
         this.width = $elm.width()
         this.y = $elm.offset().top
-        this.x = $elm.offset().left + (horizontalScroll || 0)
+        this.x = $elm.offset().left
     }
     contains(obj) {
         if (obj instanceof Point) {
@@ -22,8 +22,8 @@ export default class Rectangle {
             return this.contains(obj.center())
         }
     }
-    center(horizontalScroll) {
-        let centerX = this.x + (horizontalScroll || 0) + (this.width / 2)
+    center() {
+        let centerX = this.x + (this.width / 2)
         let centerY = this.y + (this.height / 2)
         return new Point(centerX, centerY)
     }
@@ -55,8 +55,10 @@ export default class Rectangle {
             top: point.y,
             left: point.x
         }, opt.animationDuration, function () {
-            this.moving = false,
-            callback.call(this)
+            this.moving = false
+            if(callback){
+                callback.call(this)
+            }
         })
     }
     sideOf(obj) {
@@ -84,8 +86,9 @@ export default class Rectangle {
     }
     add(obj) {
         this.$elm.append(obj.$elm).removeClass('freed')
-        // obj.moveTo(this, {}, function(){
-            obj.$elm.css({ position:'relative', top: 0, left: 0 })
+        obj.moveTo(this)
+        //, {}, function(){
+            //obj.$elm.css({ position:'relative', top: 0, left: 0 })
         // })
         return this.internalRectangle = obj
     }

@@ -113,6 +113,15 @@ button:active {
   justify-content: center;
   align-items: center; }
 
+#programming-view #highlight {
+  background-image: url(../assets/highlight.svg);
+  padding: 3px 12.33px;
+  background-size: 90px;
+  height: 70px;
+  width: 74px;
+  background-position-x: 2px;
+  background-repeat: no-repeat; }
+
 #programming-view #controls-area {
   display: flex;
   padding: 10px;
@@ -166,7 +175,7 @@ button:active {
   #programming-view #placeholders-area-wrapper .placeholder {
     padding: 2px 1px;
     background: url("../assets/placeholder.svg"); }
-  #programming-view #placeholders-area-wrapper .placeholder:last-of-type {
+  #programming-view #placeholders-area-wrapper .block.placeholder:last-of-type {
     padding-right: 25px; }
 
 #programming-view #pointer {
