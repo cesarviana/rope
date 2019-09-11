@@ -28,10 +28,10 @@ export default class RoPE
         }, random)
     }
 
-    _notify(callbackArray)
+    _notify(callbackArray, data)
     {
         callbackArray.forEach(callback=>{
-            callback.call(this)
+            callback.call(this, data)
         })
     }
 
@@ -64,14 +64,16 @@ export default class RoPE
     async execute()
     {
         this.sendCommands(this.commands)
+
+        this._notify(this.onMessageCallbacks, '<program:started>')
         //const executeCommand = Command.create(CommandTypes.Execute)
         // await this.sendCommands([executeCommand])
         this.commands.filter(command=>command.commandType === CommandTypes.Keypad)
             .forEach((command, index)=>{
-            this.onMessageCallbacks.forEach(callback=>{
-                callback.call(this, index)
-            })
+            this._notify(this.onMessageCallbacks, `<executed:${index}>`)
         })
-        
+        setTimeout(()=>{
+            this._notify(this.onMessageCallbacks, `<program:terminated>`)
+        }, 1000)
     }
 }

@@ -252,12 +252,11 @@ class App {
             const parts = message.split(':')
             const instruction = parts[0].replace('<','')
             const parameter = parts[1].replace('>','')
-
             switch(instruction)
             {
                 case 'executed':
                     this.showShadow()
-                    this.blocks.highlight({index})
+                    this.blocks.highlight({index: parameter})
                    break;
                 case 'program':
                     if(parameter === 'started'){
