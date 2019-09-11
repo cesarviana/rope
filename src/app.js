@@ -232,15 +232,15 @@ class App {
     {
         const commands = this.piecesToCommands(pieces)
         
-        if(commands.length >= 1){
-            commands.unshift(Commands.BuzzerOff)
-        }
+        // if(commands.length >= 1){
+        //     commands.unshift(Commands.BuzzerOff)
+        // }
 
-        commands.unshift(Commands.Clear)
+        // commands.unshift(Commands.Clear)
 
-        if(commands.length > 2){
-            commands.splice(commands.length - 1, 0, Commands.BuzzerOn)
-        }
+        // if(commands.length > 2){
+        //     commands.splice(commands.length - 1, 0, Commands.BuzzerOn)
+        // }
         
         this.rope.sendCommands(commands)
     }
@@ -250,10 +250,11 @@ class App {
         if(message.indexOf(':') !== -1)
         {
             const parts = message.split(':')
-            const instruction = parts[0]
-            const parameter = parts[1]
+            const instruction = parts[0].replace('<','')
+            const parameter = parts[1].replace('>','')
 
-            switch(instruction){
+            switch(instruction)
+            {
                 case 'executed':
                     this.showShadow()
                     this.blocks.highlight({index})
