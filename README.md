@@ -13,7 +13,7 @@ O aplicativo permite programar o brinquedo pelo celular, usando a metáfora de p
 <img src="https://image.ibb.co/h49eaJ/app_programming_view_with_blocks.jpg"/>
 
 ## Depurando
-O aplicativo permite executar passo a passo, cada instruçẽo programada.
+O aplicativo permite executar passo a passo, cada instrução programada.
 Desta forma a criança pode visualizar mais facilmente os erros cometidos e aprender com eles.
 
 <img src="https://image.ibb.co/gzTY2y/app_pointer.jpg"/>
