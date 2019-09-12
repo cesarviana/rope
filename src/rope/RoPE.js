@@ -43,7 +43,7 @@ export default class RoPE {
     async clear()
     {
         const clearCommand = Command.create(CommandTypes.Clear)
-        await this.sendCommands(clearCommand)
+        await this.sendCommands([clearCommand])
     }
 
     onMessage(callback) 
