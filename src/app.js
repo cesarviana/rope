@@ -58,7 +58,7 @@ class App {
     {
         this.rope.onConnected(_=>
         {
-            this.rope.sendCommands([Commands.Forward])
+            // this.rope.sendCommands([Commands.Forward])
             this.hideMagnifying()
             this.showProgrammingView()
             this.showConnected()
@@ -237,7 +237,7 @@ class App {
         //     commands.unshift(Commands.BuzzerOff)
         // }
 
-        // commands.unshift(Commands.Clear)
+        commands.unshift(Commands.Clear)
 
         // if(commands.length > 2){
         //     commands.splice(commands.length - 1, 0, Commands.BuzzerOn)
