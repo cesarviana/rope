@@ -53,12 +53,8 @@ export default class RoPE {
 
     async sendCommands(commands) 
     {
-        // this.bluetooth.setCharacteristic('Wake up!')
-        // setTimeout(()=>{
         const characteristic = this.compiler.compile(commands)
-        console.log(characteristic)
-        //     this.bluetooth.setCharacteristic(characteristic)
-        // }, 100)
+        this.bluetooth.setCharacteristic(characteristic)
     }
 
 }
