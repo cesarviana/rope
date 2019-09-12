@@ -85,6 +85,6 @@ export default class Bluetooth
 
     _log(text)
     {
-        alert(text);
+        console.log(text);
     }
 }

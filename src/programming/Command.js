@@ -51,7 +51,8 @@ const Commands = {
     Clear: Command.create(CommandTypes.Clear),
     BuzzerOn: Command.create(CommandTypes.BuzzerOn, 'S'),
     BuzzerOff: Command.create(CommandTypes.BuzzerOn, 's'),
-    Execute: Command.create(CommandTypes.Clear)
+    Execute: Command.create(CommandTypes.Clear),
+    Forward: Command.create(CommandTypes.Keypad, 'FORWARD')
 }
 
 module.exports = {

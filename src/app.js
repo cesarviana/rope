@@ -58,6 +58,7 @@ class App {
     {
         this.rope.onConnected(_=>
         {
+            this.rope.sendCommands([Commands.Foward])
             this.hideMagnifying()
             this.showProgrammingView()
             this.showConnected()
