@@ -233,15 +233,15 @@ class App {
     {
         const commands = this.piecesToCommands(pieces)
         
-        // if(commands.length >= 1){
-        //     commands.unshift(Commands.BuzzerOff)
-        // }
+        if(commands.length >= 1){
+            commands.unshift(Commands.BuzzerOff)
+        }
 
         commands.unshift(Commands.Clear)
 
-        // if(commands.length > 2){
-        //     commands.splice(commands.length - 1, 0, Commands.BuzzerOn)
-        // }
+        if(commands.length > 2){
+            commands.splice(commands.length - 1, 0, Commands.BuzzerOn)
+        }
         
         this.rope.sendCommands(commands)
     }
