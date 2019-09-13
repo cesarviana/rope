@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "RoPE's hybrid programming interface",
   "scripts": {
-    "dev": "(npm run watch & npm run serve & npm run build-watch & wait)",
+    "dev": "(npm run watch & npm run build-watch & wait)",
     "watch": "node-sass -w style/style.sass dist/style.css",
     "serve": "live-server",
     "build-watch": "npx webpack --watch",

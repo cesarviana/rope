@@ -464,6 +464,11 @@ export default class BlocksView {
         })
     }
 
+    clear()
+    {
+        this.setCommands([])
+    }
+
     hideHighlight() {
         this.highlightPiece.$elm.fadeOut(400)
     }

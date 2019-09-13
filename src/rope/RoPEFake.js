@@ -66,8 +66,6 @@ export default class RoPE
         this.sendCommands(this.commands)
 
         this._notify(this.onMessageCallbacks, '<program:started>')
-        //const executeCommand = Command.create(CommandTypes.Execute)
-        // await this.sendCommands([executeCommand])
         this.commands.filter(command=>command.commandType === CommandTypes.Keypad)
             .forEach((command, index)=>{
             this._notify(this.onMessageCallbacks, `<executed:${index}>`)

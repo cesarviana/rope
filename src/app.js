@@ -58,7 +58,6 @@ class App {
     {
         this.rope.onConnected(_=>
         {
-            // this.rope.sendCommands([Commands.Forward])
             this.hideMagnifying()
             this.showProgrammingView()
             this.showConnected()
@@ -90,7 +89,6 @@ class App {
                     this.sounds.error.play()
                 } else {
                     this.sounds.next.play()
-                    // TODO this.rope.executeNextInstruction()
                 }
             }
         })
@@ -149,7 +147,6 @@ class App {
 
     hideShadow()
     {
-        this.blocks.hideHighlight()
         $('#shadow').fadeOut(1000, 'linear')
     }
 
@@ -248,27 +245,34 @@ class App {
 
     handleMessage(message)
     {
-        if(message.indexOf(':') !== -1)
+        const pattern = /(?<instruction>\w+):(?<parameter>\w+)/
+
+        const match = message.match(pattern)
+
+        if(!match) return
+
+        const groups = match.groups
+        const instruction = groups.instruction
+        const parameter = groups.parameter
+
+        switch(instruction)
         {
-            const parts = message.split(':')
-            const instruction = parts[0].replace('<','')
-            const parameter = parts[1].replace('>','')
-            switch(instruction)
-            {
-                case 'executed':
+            case 'executed':
+                const nextIndex = Number(parameter) + 1
+                this.blocks.highlight({index: nextIndex})
+                break;
+            case 'program':
+                if(parameter === 'started'){
                     this.showShadow()
-                    this.blocks.highlight({index: parameter})
-                   break;
-                case 'program':
-                    if(parameter === 'started'){
-                        this.showShadow()
-                    } else {
-                        this.hideShadow()
-                        this.blocks.hideHighlight()
-                    }
-                    break;
-            }
+                    this.blocks.highlight({index: 0})
+                } else {
+                    this.hideShadow()
+                    this.blocks.hideHighlight()
+                    this.blocks.clear()
+                }
+                break;
         }
+        
     }
 
     // util
