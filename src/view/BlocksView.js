@@ -233,6 +233,15 @@ export default class BlocksView {
         this.removeRemainingPlaceholders()
         $('.placeholder').css('padding-right', 0)
         $('.placeholder').last().css('padding-right','25px')
+        
+        this.adjustPiecesToPlaceholders()
+    }
+
+    adjustPiecesToPlaceholders() 
+    {
+        this.getOccupedPlaceholders().forEach(placeholder=>{
+            placeholder.internalRectangle.moveTo(placeholder)
+        })
     }
 
     getOccupedPlaceholders() {
@@ -447,7 +456,7 @@ export default class BlocksView {
         
         this.snap(placeholder, piece)
 
-        this.addRightPlaceholder()
+        this.adjustPlaceholders()
         this.movePiecesToLeft()
     }
 
