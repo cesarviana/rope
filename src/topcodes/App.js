@@ -1,7 +1,3 @@
-import RoPE from '../rope/RoPE'
-import Camera from './Camera'
-import PWA from '../pwa/'
-import Compiler from './Compiler'
 import StartButton from './StartButton'
 
 export default class App
@@ -31,10 +27,13 @@ export default class App
                 this.rope.sendInstructions(commandAttribute);
             })
         }
+
+        this.rope.onConnected(()=>document.querySelector('button').style='display:none')
+        this.rope.onConnectionFailed(()=>document.querySelector('button').style='display:block')
     }
     
     async start()
-    {
+    { 
         this._tryConnectRoPE()
         this.camera.start();
     }
@@ -57,32 +56,21 @@ export default class App
 
     async ifChangedParseAndSendInstructions(topcodes)
     {
+        const instructions = this.compiler.compile(topcodes)
+        App.log(instructions);
+        
         if(this.startButton.isPressed(topcodes))
         {
-            await this.parseTopcodesAndSendInstructions(topcodes)            
-        }
-    }
-    
-    
-    async parseTopcodesAndSendInstructions(topcodes)
-    {
-        const instructionsString = this.compiler.compile(topcodes)
-        App.log(instructionsString);
-        
-        try 
-        {
-            App.log('Execute!' + instructionsString);
-            await this.rope.sendInstructions( instructionsString );
+            await this.rope.sendInstructions(instructions + 'e')    
         } 
-        catch (error) 
-        {
-            App.log('Error: ' + error)
+        else if(instructions !== this.lastInstructions){
+            this.lastInstructions = instructions
+            await this.rope.sendInstructions(instructions)
         }
     }
-
+   
     static log(text)
     {
-        console.log(text)
         document.getElementById('status').innerHTML = text + '<br>'
     }
 }
