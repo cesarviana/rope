@@ -29,11 +29,13 @@ export default class Camera
         this.TopCodes.setVideoFrameCallback(this.canvasId, jsonString => {
             
             const topcodes = JSON.parse(jsonString).topcodes;
-            this._drawPositions(topcodes)
             
             if(this._topcodesChanged(topcodes))
             {
+                this._drawPositions(topcodes)
+
                 this.topcodes = topcodes;
+                console.log(topcodes)
                 
                 this.codeChangesCountArray = [];
                 this.changeOnTopcodesNumber = 0;
@@ -72,9 +74,10 @@ export default class Camera
         if(this._sameNumberOfCodes()){
             for(let i=0; i < this.topcodes.length; i++)
             {
-                if(this.topcodes[i].code !== newTopcodes[i].code ||
-                    this.topcodes[i].angle !== newTopcodes[i].angle
-                )
+                const changedCode = this.topcodes[i].code !== newTopcodes[i].code
+                const angleDiff = Math.abs(this.topcodes[i].angle - newTopcodes[i].angle)
+                
+                if(changedCode || angleDiff > 0.5)
                 {
                     this._incrementCodeChange(i)
                 }
