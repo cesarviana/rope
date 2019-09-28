@@ -4275,10 +4275,7 @@ var TopCodes = {
         var canvas = document.querySelector("#" + canvasId);
         var video = document.querySelector("#" + canvasId + "-video");
         if (canvas && video) {
-            var vw = parseInt(canvas.getAttribute('width'));
-            var vh = parseInt(canvas.getAttribute('height'));
-            var vc = { audio: false, video: { mandatory : { minWidth: vw, maxWidth : vw, minHeight : vh, maxHeight : vh }}};
-            navigator.mediaDevices.getUserMedia(vc)
+            navigator.mediaDevices.getUserMedia({video: true})
                 .then(function(mediaStream) {
                     video.srcObject = mediaStream;
                     TopCodes._mediaStreams[canvasId] = mediaStream;
