@@ -1,7 +1,11 @@
+import StartButton from './StartButton'
+
 export default class Camera
 {
     constructor(TopCodes, canvasId)
     {
+        this.startButton = new StartButton();
+
         this.TopCodes = TopCodes;
         this.canvasId = canvasId;
         this.topcodes = [];
@@ -27,14 +31,21 @@ export default class Camera
     {
         this.onChangeCodesCallback = callback;
         this.TopCodes.setVideoFrameCallback(this.canvasId, jsonString => {
-            
             const topcodes = JSON.parse(jsonString).topcodes;
+
+            this._drawPositions(topcodes)
+
             if(this._topcodesChanged(topcodes))
             {
-                this._drawPositions(topcodes)
-                console.log(topcodes.map(t=>t.code))
-                this.topcodes = topcodes;
-                
+                this._drawPositions(topcodes, 'red')
+
+                this.topcodes = topcodes.map(topcode=> {
+                    return {
+                        code: topcode.code,
+                        angle: this._absoluteAngle(topcode.angle)
+                    }
+                });
+
                 this.codeChangesCountArray = [];
                 this.changeOnTopcodesNumber = 0;
 
@@ -43,18 +54,18 @@ export default class Camera
         })
     }
     
-    _drawPositions(topcodes)
+    _drawPositions(topcodes, textColor)
     {
         const canvas = document.getElementById(this.canvasId);
         const ctx = canvas.getContext('2d');
         ctx.font = "20px Arial";
-        ctx.fillStyle = "yellow";
+        ctx.fillStyle = textColor || "yellow";
         topcodes.forEach(topcode=>
         {
+            ctx.fillText(`angle:${topcode.angle}`,   topcode.x, topcode.y-20);
             ctx.fillText(`radius:${topcode.radius}`, topcode.x, topcode.y);
             ctx.fillText(`x:${topcode.x}`,           topcode.x, topcode.y+20);
             ctx.fillText(`y:${topcode.y}`,           topcode.x, topcode.y+40);
-            ctx.fillText(`angle:${topcode.angle}`,   topcode.x, topcode.y+60);
         })
     }
     
@@ -67,63 +78,37 @@ export default class Camera
      */
     _topcodesChanged(newTopcodes)
     {
-        this._countNumberOfCodesChanged(newTopcodes);
-        
-        if(this._sameNumberOfCodes()){
+        if(this.topcodes.length === newTopcodes.length ){
+
+            let codeChanges = 0;
+
             for(let i=0; i < this.topcodes.length; i++)
             {
-                const savedCode = this.topcodes[i].code
-                const newCode = newTopcodes[i].code
+                const savedTopcode = this.topcodes[i]
+                const newTopcode = newTopcodes[i]
+
+                const savedCode = savedTopcode.code
+                const newCode = newTopcode.code
                 const changedCode = savedCode !== newCode
                 
-                const angleDiff = Math.abs(this.topcodes[i].angle - newTopcodes[i].angle)
-                
-                if(changedCode || angleDiff > 0.5)
+                if(changedCode)
                 {
-                    this._incrementCodeChange(i)
-                }
-                else
-                {
-                    this._decrementCodeChange(i)
+                    codeChanges++
                 }
             }
-        }
-        
-        return this.changeOnTopcodesNumber > this.changeOnTopcodesNumberLimit ||
-               this.codeChangesCountArray.find(changesCount => changesCount > this.codeChangesLimit);
-    }
 
-    _countNumberOfCodesChanged(newTopcodes)
-    {
-        if(newTopcodes.length !== this.topcodes.length)
-        {
-            this.changeOnTopcodesNumber++;
+            return codeChanges > this.codeChangesLimit || this.starRotated(newTopcodes)
         } 
-        else 
-        {
-            this.changeOnTopcodesNumber = 0;
-        }
+        return true
+        
     }
 
-    _incrementCodeChange(i)
-    {
-        if(this.codeChangesCountArray[i] === undefined)
-        {
-            this.codeChangesCountArray[i] = 0;
-        }
-        this.codeChangesCountArray[i]++;
+    _absoluteAngle(angle){
+        return (angle + 2).toFixed(2)
     }
 
-    _decrementCodeChange(i)
+    starRotated(topcodes)
     {
-        if(this.codeChangesCountArray[i] > 0)
-        {
-            this.codeChangesCountArray[i]--;
-        }
-    }
-
-    _sameNumberOfCodes()
-    {
-        return this.changeOnTopcodesNumber === 0;
+        return this.startButton.isPressed(topcodes)
     }
 }

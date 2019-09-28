@@ -1,13 +1,5 @@
 export default class StartButton 
 {
-    
-    constructor()
-    {
-        this.executeTopCodeChangeProperty = undefined;
-        this.propertyName = 'angle'
-        this.difference = 0.3
-    }
-    
     isPressed(topcodes)
     {
         const executeTopCode = topcodes.find(topcode => topcode.code === 31) // TODO
@@ -17,19 +9,15 @@ export default class StartButton
             return false;
         }
         
-        const executeTopCodeChangeProperty = Math.abs(executeTopCode[this.propertyName])
-        
-        if(this.executeTopCodeChangeProperty === undefined)
-        {
-            this.executeTopCodeChangeProperty = executeTopCodeChangeProperty;
-            return false;
+        if(!this.angle) {
+            this.angle = executeTopCode.angle
         }
+
+        const angleDiff = Math.abs(executeTopCode.angle - this.angle);
         
-        const difference = Math.abs(executeTopCodeChangeProperty - this.executeTopCodeChangeProperty);
-        
-        if( difference > this.difference )
+        if( angleDiff > 1 )
         {
-            this.executeTopCodeChangeProperty = executeTopCodeChangeProperty;
+            this.angle = executeTopCode.angle;
             return true;
         }
         

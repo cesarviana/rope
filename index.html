@@ -1,34 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-  	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1,maximum-scale=1"/>
+  	<!-- <meta name="viewport" content="width=device-width, initial-scale=0.5, minimum-scale=1,maximum-scale=1"/> -->
   	<link rel="icon" href="favicon.ico" />
   <title>RoPE Programming</title>
   <meta charset="utf-8"/>
   <style>
   	body {
-  		background: black;
-  		color: white;
   		text-align: center;
+		  background: white;
   	}
-  	#startButton {
+	h1, span, button {
+		font-size: 8vh;
+		display: block;
+	}  
+	img {
+		width: 20%;
+	}
+  	button {
   	  width: 80%;
-  	  height: 40px;
-  	  font-size: 25px;
-  	  background: green;
-  	  border: none;
-  	  margin: 10px;
+  	  height: 10vh;
+  	  background: white;
+  	  border: 1px solid #ebf89f;
+  	  margin: 0 auto;	
   	}
+	canvas {
+	  margin: 0 auto
+	}
   </style>
 </head>
 
 <body style="padding:0; margin:0;">
-  <h1 id='status'>Status</h1>
+  <h1>RoPE Blocks</h1>
+  
+  <img src="rope.svg" alt="RoPE Blocks">
+  
+  <span id='status'></span>
   
   <button id="startButton">Conectar</button>
-  
-  <canvas id="video-canvas" width="400" height="400">
-  </canvas>
+     
+  <canvas id="video-canvas" width="600" height="850"></canvas>
   
   <script src="src/topcodes/topcodes.js"></script>
   <script src="dist/topcodes.js"></script>

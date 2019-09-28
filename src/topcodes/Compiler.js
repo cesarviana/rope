@@ -5,8 +5,9 @@ export default class Compiler
 {
     constructor()
     {
-        this.EXECUTE_CHAR = 'e';
         this.CLEAR_CHAR   = 'c';
+        this.DISABLE_SOUND_CHAR = 's'
+        this.ENABLE_SOUND_CHAR = 'S'
         this.codes = 
         {
             327: 'f',
@@ -33,13 +34,23 @@ export default class Compiler
         .map(topcode => this.codes[topcode.code] || '')
         .reduce((strA,strB) => strA + strB, '');
         
-        if(instructionsString.includes('e'))
-        {
-            const instructionsWithoutExecute = instructionsString.replace(this.EXECUTE_CHAR, '');
-            return this.CLEAR_CHAR + instructionsWithoutExecute + this.EXECUTE_CHAR;
-        } 
+        const result = /(?<commands>\w+[^e])(?<execute>e)?/.exec(instructionsString)
         
-        return this.CLEAR_CHAR + instructionsString;
+        if(!result)
+        {
+            return this.CLEAR_CHAR + instructionsString;
+        }
+
+        const commands = result.groups.commands
+        const firstCommands = commands.substring(0, commands.length - 1)
+        const lastCommand = commands[commands.length - 1]
+
+        return  this.CLEAR_CHAR + 
+                this.DISABLE_SOUND_CHAR +
+                (firstCommands || '') +
+                this.ENABLE_SOUND_CHAR +
+                (lastCommand || '')
+        
     }
     
     
