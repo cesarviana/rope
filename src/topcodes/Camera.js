@@ -7,9 +7,9 @@ export default class Camera
         this.topcodes = [];
         
         this.codeChangesCountArray = [];
-        this.codeChangesLimit = 5;
+        this.codeChangesLimit = 1;
         
-        this.changeOnTopcodesNumberLimit = 5;
+        this.changeOnTopcodesNumberLimit = 1;
         this.changeOnTopcodesNumber = 0;
         
         this.onChangeCodesCallback = function(){}
@@ -29,18 +29,16 @@ export default class Camera
         this.TopCodes.setVideoFrameCallback(this.canvasId, jsonString => {
             
             const topcodes = JSON.parse(jsonString).topcodes;
-            
             if(this._topcodesChanged(topcodes))
             {
                 this._drawPositions(topcodes)
-
+                console.log(topcodes.map(t=>t.code))
                 this.topcodes = topcodes;
-                console.log(topcodes)
                 
                 this.codeChangesCountArray = [];
                 this.changeOnTopcodesNumber = 0;
 
-                this.onChangeCodesCallback(topcodes);
+                this.onChangeCodesCallback([...topcodes]);
             }
         })
     }
@@ -74,7 +72,10 @@ export default class Camera
         if(this._sameNumberOfCodes()){
             for(let i=0; i < this.topcodes.length; i++)
             {
-                const changedCode = this.topcodes[i].code !== newTopcodes[i].code
+                const savedCode = this.topcodes[i].code
+                const newCode = newTopcodes[i].code
+                const changedCode = savedCode !== newCode
+                
                 const angleDiff = Math.abs(this.topcodes[i].angle - newTopcodes[i].angle)
                 
                 if(changedCode || angleDiff > 0.5)
