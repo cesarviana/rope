@@ -54,6 +54,7 @@ export default class RoPE {
     async sendCommands(commands) 
     {
         const characteristic = this.compiler.compile(commands)
+        console.log('sending instructions...')
         this.bluetooth.setCharacteristic(characteristic)
     }
 

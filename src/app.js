@@ -240,8 +240,25 @@ class App {
             commands.splice(commands.length - 1, 0, Commands.BuzzerOn)
         }
         
+        this.expectFeedback()
+
         this.rope.sendCommands(commands)
     }
+
+    // expectFeedback()
+    // {
+    //     if(this.expectingPieceAddedFeedback)
+    //     {
+    //         clearInterval(this.feedbackInterval)
+    //     }
+
+    //     this.expectingPieceAddedFeedback = true
+    //     // console.log('sending instructions, so expecting feedback...')
+    //     this.feedbackInterval = setTimeout(()=>{
+    //         this.expectingPieceAddedFeedback = false
+    //         // console.log('time passed... so we aren\'t expecting feedbacks anymore')
+    //     }, 3500)
+    // }
 
     handleMessage(message)
     {
@@ -271,6 +288,24 @@ class App {
                     this.blocks.clear()
                 }
                 break;
+            case 'addi':
+                
+                // console.log('message arrived, and...')
+                if(this.expectingPieceAddedFeedback) // is a feedback, no need to add instructions
+                {
+                    // console.log('we are expecting feedback, so don\'t add instructions' )
+                    return
+                }
+                                                     // the keypad was really pressed
+
+                // console.log('no feedback expected, so we add instructions')
+
+                const commands = {
+                    f:'FORWARD', b:'BACKWARD', r:'RIGHT', l:'LEFT'
+                }
+                const command = commands[parameter]
+                this.blocks.addPieceFrom(command)
+            break;
         }
         
     }
