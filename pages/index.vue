@@ -18,9 +18,10 @@
                  :sort="false"
                  :group="{ name: 'shared', pull: 'clone', put: false }"
       >
-        <piece v-for="piece in availablePieces" :command="piece.command">{{piece.id}}</piece>
+        <piece v-for="piece in availablePieces" :command="piece.command"/>
       </draggable>
       <start-button/>
+      {{nextId}}
     </div>
   </div>
 </template>
@@ -50,20 +51,10 @@
           { id: 2, command: commandTypes.LEFT },
           { id: 3, command: commandTypes.RIGHT }
         ],
-        pieces: []
+        pieces: [],
+        nextId: 4
       }
-    },
-    mounted() {
-      // const commandTypesArray = Object.values(commandTypes);
-      // const numPieces = 3;//Math.random() * 20 + 1;
-      // for (let i = 0; i < numPieces; i++) {
-      //   this.pieces.push({
-      //     id: i,
-      //     command: commandTypesArray[i % commandTypesArray.length]
-      //   })
-      // }
-    },
-    methods: {}
+    }
   }
 </script>
 
@@ -93,6 +84,16 @@
       flex-flow: row;
       justify-content: space-around;
       align-items: center;
+
+      div.piece:active {
+        animation-name: rotate;
+        animation-duration: .5s;
+      }
+
+      @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        25% { transform: rotate(10deg); }
+      }
     }
   }
 
