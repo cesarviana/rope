@@ -3,15 +3,26 @@
     <svg
       width="105"
       height="83"
-      viewBox="0 0 26 20">
-      <g transform="translate(-6.1832128,-9.0501561)">
-        <path :class="command"
-              style="stroke:#241c1c;stroke-width:0.7"
-              d="m 6.2396572,24.43389 v -4.07864 l 0.446231,-0.0414 c 0.53832,-0.05 0.824534,0.0114 1.293128,0.27723 1.174375,0.66629 2.5288458,0.23195 3.0685308,-0.98401 0.15997,-0.36043 0.141064,-1.09248 -0.03862,-1.49532 -0.316709,-0.71004 -0.973717,-1.16278 -1.7613458,-1.21372 -0.467231,-0.0302 -0.688122,0.0264 -1.85103,0.47461 -0.284057,0.10948 -0.619038,0.13282 -0.950305,0.0662 l -0.206589,-0.0415 V 13.25197 9.1066005 h 10.1806688 10.18067 v 4.2201295 4.22014 h 0.53667 c 0.48549,0 0.5935,-0.0257 1.13288,-0.26989 0.32792,-0.14843 0.75087,-0.30111 0.9399,-0.33928 0.94872,-0.19153 2.03529,0.48686 2.28895,1.4291 0.18279,0.67903 -0.0806,1.541 -0.61,1.99658 -0.63491,0.54635 -1.60811,0.66335 -2.27998,0.27414 -0.71513,-0.41429 -0.76719,-0.43232 -1.24562,-0.43139 -0.25592,0 -0.53224,0.0189 -0.61405,0.041 l -0.14875,0.0401 v 4.11269 4.1127 H 16.420326 6.2396572 Z"/>
+      viewBox="-1 -1 28 21">
+      <defs>
+        <filter id="selected-item">
+          <feOffset dx="1" dy="1" in="RGB" result="offsetOut"></feOffset>
+          <feGaussianBlur in="offsetOut" result="blurOut" stdDeviation="0.6"></feGaussianBlur>
+          <feColorMatrix in="blurOut" type="luminanceToAlpha" result="luminanceOut"></feColorMatrix>
+          <feBlend in="SourceGraphic" in2="blurOut" result="sourceBlend"></feBlend>
+          <feOffset in="sourceBlend" dx="-0.8" dy="-0.8"></feOffset>
+        </filter>
+      </defs>
+      <g class="piece-body">
+        <path
+          transform="translate(-6.1832128,-9.0501561)"
+          :class="command"
+          style="stroke:#241c1c;stroke-width:0.7"
+          d="m 6.2396572,24.43389 v -4.07864 l 0.446231,-0.0414 c 0.53832,-0.05 0.824534,0.0114 1.293128,0.27723 1.174375,0.66629 2.5288458,0.23195 3.0685308,-0.98401 0.15997,-0.36043 0.141064,-1.09248 -0.03862,-1.49532 -0.316709,-0.71004 -0.973717,-1.16278 -1.7613458,-1.21372 -0.467231,-0.0302 -0.688122,0.0264 -1.85103,0.47461 -0.284057,0.10948 -0.619038,0.13282 -0.950305,0.0662 l -0.206589,-0.0415 V 13.25197 9.1066005 h 10.1806688 10.18067 v 4.2201295 4.22014 h 0.53667 c 0.48549,0 0.5935,-0.0257 1.13288,-0.26989 0.32792,-0.14843 0.75087,-0.30111 0.9399,-0.33928 0.94872,-0.19153 2.03529,0.48686 2.28895,1.4291 0.18279,0.67903 -0.0806,1.541 -0.61,1.99658 -0.63491,0.54635 -1.60811,0.66335 -2.27998,0.27414 -0.71513,-0.41429 -0.76719,-0.43232 -1.24562,-0.43139 -0.25592,0 -0.53224,0.0189 -0.61405,0.041 l -0.14875,0.0401 v 4.11269 4.1127 H 16.420326 6.2396572 Z"></path>
+        <path
+          style="fill:white;stroke:#000000;stroke-width:0.46165714px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+          :d="d[command]"></path>
       </g>
-      <path
-        style="fill:#2b0000;stroke:#000000;stroke-width:0.46165714px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-        :d="d[command]"/>
     </svg>
   </div>
 </template>
@@ -39,7 +50,23 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+  .piece:active {
+    $overOtherPieces: 100;
+    z-index: $overOtherPieces;
+  }
+
+  .piece-body:hover {
+    cursor: move;
+  }
+
+  .piece-body:active {
+    cursor: grabbing;
+    filter: url(#selected-item);
+    transform: rotate(-1grad);
+  }
+
   .forward {
     fill: #66c9fc;
   }

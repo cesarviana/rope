@@ -2,26 +2,26 @@
   <div class="container">
     <div class="dragging">
       <draggable id="pieces"
-                 :key="pieces.length"
                  ghost-class="ghost"
                  easing="cubic-bezier(0.5, 0, 0, 1)"
                  animation="150"
                  group="shared"
+                 remove-on-spill="true"
       >
         <piece v-for="piece in pieces" :command="piece.command"></piece>
       </draggable>
     </div>
     <div class="available">
       <rope/>
-      <draggable style="display:flex; justify-content: space-around"
-                 :key="availablePieces.length"
+      <draggable
+        style="display:flex; justify-content: space-around"
+                 :direction="'horizontal'"
                  :sort="false"
                  :group="{ name: 'shared', pull: 'clone', put: false }"
       >
-        <piece v-for="piece in availablePieces" :command="piece.command"/>
+        <piece v-for="piece in availablePieces" :command="piece.command" />
       </draggable>
       <start-button/>
-      {{nextId}}
     </div>
   </div>
 </template>
@@ -32,7 +32,7 @@
   import startButton from '~/components/StartButton'
   import piece from '~/components/Piece'
 
-  const commandTypes = {
+  const commands = {
     FORWARD: 'forward',
     BACKWARD: 'backward',
     LEFT: 'left',
@@ -46,13 +46,12 @@
     data() {
       return {
         availablePieces: [
-          { id: 0, command: commandTypes.FORWARD },
-          { id: 1, command: commandTypes.BACKWARD },
-          { id: 2, command: commandTypes.LEFT },
-          { id: 3, command: commandTypes.RIGHT }
+          {command: commands.FORWARD},
+          {command: commands.BACKWARD},
+          {command: commands.LEFT},
+          {command: commands.RIGHT}
         ],
-        pieces: [],
-        nextId: 4
+        pieces: []
       }
     }
   }
@@ -61,6 +60,7 @@
 <style scoped lang="scss">
 
   $spacingDefault: 20px;
+  $pieceWidth: 78px;
 
   .container {
     height: 100vh;
@@ -74,6 +74,43 @@
       overflow-y: hidden;
       border: 1px solid white;
       padding: $spacingDefault;
+
+      #pieces {
+        margin: 0 auto;
+        display: flex;
+        // border: 1px solid blue;
+        min-height: $pieceWidth;
+        min-width: $pieceWidth * 3.4;
+        // padding: 30px;
+        background-image: url('/placeholder.svg');
+        background-size: 80px 100%;
+        background-repeat: repeat-x;
+        background-position-y: center;
+        // background-color: red;
+
+        div.piece {
+          width: $pieceWidth;
+        }
+
+        .ghost {
+          visibility: hidden;
+        }
+      }
+
+    }
+
+    .piece:active {
+      animation-name: rotate;
+      animation-duration: .5s;
+    }
+
+    @keyframes rotate {
+      /*0% {*/
+      /*  transform: rotate(0deg);*/
+      /*}*/
+      /*25% {*/
+      /*  transform: rotate(10deg);*/
+      /*}*/
     }
 
     .available {
@@ -84,33 +121,8 @@
       flex-flow: row;
       justify-content: space-around;
       align-items: center;
-
-      div.piece:active {
-        animation-name: rotate;
-        animation-duration: .5s;
-      }
-
-      @keyframes rotate {
-        0% { transform: rotate(0deg); }
-        25% { transform: rotate(10deg); }
-      }
     }
   }
 
-  #pieces {
-    margin: 0 auto;
-    display: flex;
-    border: 1px solid blue;
-    min-width: 100px;
-    min-height: 100px;
-
-    div.piece {
-      width: 83px;
-    }
-
-    .ghost {
-      visibility: hidden;
-    }
-  }
 
 </style>
