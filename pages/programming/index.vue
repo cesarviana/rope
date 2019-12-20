@@ -7,19 +7,22 @@
                  animation="150"
                  group="shared"
                  remove-on-spill="true"
+                 v-model="pieces"
       >
-        <piece v-for="piece in pieces" :command="piece.command"></piece>
+        <piece v-for="piece in pieces" :key="piece.id" :command="piece.command"></piece>
       </draggable>
     </div>
     <div class="available">
       <rope/>
       <draggable
+        v-model="availablePieces"
+        :clone="clone"
         style="display:flex; justify-content: space-around"
-                 :direction="'horizontal'"
-                 :sort="false"
-                 :group="{ name: 'shared', pull: 'clone', put: false }"
+        :direction="'horizontal'"
+        :sort="false"
+        :group="{ name: 'shared', pull: 'clone', put: false }"
       >
-        <piece v-for="piece in availablePieces" :command="piece.command" />
+        <piece v-for="piece in availablePieces" :key="piece.id" :command="piece.command" />
       </draggable>
       <start-button/>
     </div>
@@ -46,12 +49,13 @@
     data() {
       return {
         availablePieces: [
-          {command: commands.FORWARD},
-          {command: commands.BACKWARD},
-          {command: commands.LEFT},
-          {command: commands.RIGHT}
+          {id: 0, command: commands.FORWARD},
+          {id: 1, command: commands.BACKWARD},
+          {id: 2, command: commands.LEFT},
+          {id: 3, command: commands.RIGHT}
         ],
-        pieces: []
+        pieces: [],
+        maxId: 3
       }
     },
     mounted() {
@@ -65,6 +69,18 @@
     methods: {
       goToFirstPage() {
         this.$router.push('/?connectionFailed=true')
+      },
+      clone(piece) {
+        return {
+          id: ++this.maxId,
+          command: piece.command
+        }
+      }
+    },
+    watch: {
+      pieces: function(val){
+        const commands = this.pieces.map(piece => piece.command)
+        this.$rope.sendCommands(commands)
       }
     }
   }

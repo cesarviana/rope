@@ -45,9 +45,16 @@ export default class RoPE {
   }
 
   async sendCommands(commands) {
-    let firstCharOfEachCommand = commands.map(command => command[0]);
-    const stringToSend = firstCharOfEachCommand.reduce((a, b) => a + b, '');
-    console.log('sending instructions...');
+    const COMMANDS_PREFIX = 'cmds:';
+    const SOUND_OFF = 's';
+    const SOUND_ON = 'S';
+
+    const firstCharOfEachCommand = commands.map(command => command[0]);
+    const commandChars = firstCharOfEachCommand.reduce((a, b) => a + b, '');
+    const firsCommandChars = commandChars.length > 1 ? commandChars.substring(0, commandChars.length - 1) : ''
+    const lastCommandChar = commandChars[commandChars.length - 1]
+    const stringToSend = COMMANDS_PREFIX + SOUND_OFF + firsCommandChars + SOUND_ON + lastCommandChar
+    console.log('sending instructions...', stringToSend);
     this.bluetooth.setCharacteristic(stringToSend)
   }
 

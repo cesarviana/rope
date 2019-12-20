@@ -6,7 +6,7 @@ export default class RoPE {
   }
 
   async search() {
-    const timeout = (Math.random() * 4 + 3) * 1000;
+    const timeout = (Math.random() * 2 + 3) * 1000;
     return new Promise((resolve, reject) => {
       setTimeout(_ => {
         const connected = Math.random() > 0.5;
@@ -31,6 +31,10 @@ export default class RoPE {
 
   onConnectionFailed(callback) {
     this.onConnectionFailedCallbacks.push(callback)
+  }
+
+  isConnected() {
+    return Math.random() > 0.15
   }
 
   onMessage(callback) {
