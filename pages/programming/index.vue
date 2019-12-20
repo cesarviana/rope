@@ -1,0 +1,128 @@
+<template>
+  <div class="container">
+    <div class="dragging">
+      <draggable id="pieces"
+                 ghost-class="ghost"
+                 easing="cubic-bezier(0.5, 0, 0, 1)"
+                 animation="150"
+                 group="shared"
+                 remove-on-spill="true"
+      >
+        <piece v-for="piece in pieces" :command="piece.command"></piece>
+      </draggable>
+    </div>
+    <div class="available">
+      <rope/>
+      <draggable
+        style="display:flex; justify-content: space-around"
+                 :direction="'horizontal'"
+                 :sort="false"
+                 :group="{ name: 'shared', pull: 'clone', put: false }"
+      >
+        <piece v-for="piece in availablePieces" :command="piece.command" />
+      </draggable>
+      <start-button/>
+    </div>
+  </div>
+</template>
+
+<script>
+  import draggable from 'vuedraggable'
+  import rope from '~/components/RoPE'
+  import startButton from '~/components/StartButton'
+  import piece from '~/components/Piece'
+
+  const commands = {
+    FORWARD: 'forward',
+    BACKWARD: 'backward',
+    LEFT: 'left',
+    RIGHT: 'right'
+  };
+
+  export default {
+    components: {
+      draggable, rope, piece, startButton
+    },
+    data() {
+      return {
+        availablePieces: [
+          {command: commands.FORWARD},
+          {command: commands.BACKWARD},
+          {command: commands.LEFT},
+          {command: commands.RIGHT}
+        ],
+        pieces: []
+      }
+    }
+  }
+</script>
+
+<style scoped lang="scss">
+
+  $spacingDefault: 20px;
+  $pieceWidth: 78px;
+
+  .container {
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+
+    .dragging {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      overflow-y: hidden;
+      border: 1px solid white;
+      padding: $spacingDefault;
+
+      #pieces {
+        margin: 0 auto;
+        display: flex;
+        // border: 1px solid blue;
+        min-height: $pieceWidth;
+        min-width: $pieceWidth * 3.4;
+        // padding: 30px;
+        background-image: url('/placeholder.svg');
+        background-size: 80px 100%;
+        background-repeat: repeat-x;
+        background-position-y: center;
+        // background-color: red;
+
+        div.piece {
+          width: $pieceWidth;
+        }
+
+        .ghost {
+          visibility: hidden;
+        }
+      }
+
+    }
+
+    .piece:active {
+      animation-name: rotate;
+      animation-duration: .5s;
+    }
+
+    @keyframes rotate {
+      /*0% {*/
+      /*  transform: rotate(0deg);*/
+      /*}*/
+      /*25% {*/
+      /*  transform: rotate(10deg);*/
+      /*}*/
+    }
+
+    .available {
+      background: #f2f2f2;
+      height: 100px;
+      width: 100%;
+      display: flex;
+      flex-flow: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+
+
+</style>

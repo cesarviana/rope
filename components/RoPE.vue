@@ -1,10 +1,6 @@
 <template>
   <div>
     <svg
-      xmlns:dc="http://purl.org/dc/elements/1.1/"
-      xmlns:cc="http://creativecommons.org/ns#"
-      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-      xmlns:svg="http://www.w3.org/2000/svg"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       version="1.1"
@@ -12,20 +8,6 @@
       viewBox="0 0 67.808961 69.225155"
       height="60"
       width="80">
-      <defs
-        id="defs8204"/>
-      <metadata
-        id="metadata8207">
-        <rdf:RDF>
-          <cc:Work
-            rdf:about="">
-            <dc:format>image/svg+xml</dc:format>
-            <dc:type
-              rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-            <dc:title></dc:title>
-          </cc:Work>
-        </rdf:RDF>
-      </metadata>
       <g
         transform="translate(-301.70032,-1027.2167)"
         id="layer1">
@@ -172,7 +154,15 @@
 
 <script>
   export default {
-    name: "RoPE"
+    name: "RoPE",
+    props: {
+      sleeping: {
+        // TODO Show sleeping face
+        required: false,
+        default: false,
+        type: Boolean
+      }
+    }
   }
 </script>
 
