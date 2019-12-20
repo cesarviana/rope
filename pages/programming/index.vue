@@ -53,6 +53,19 @@
         ],
         pieces: []
       }
+    },
+    mounted() {
+      if(!this.$rope.isConnected()){
+        this.goToFirstPage()
+      }
+      this.$rope.onConnectionFailed(()=>{
+        this.goToFirstPage()
+      })
+    },
+    methods: {
+      goToFirstPage() {
+        this.$router.push('/?connectionFailed=true')
+      }
     }
   }
 </script>

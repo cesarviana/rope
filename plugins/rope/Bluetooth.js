@@ -19,7 +19,7 @@ export default class Bluetooth {
       });
 
       this.device.addEventListener('gattserverdisconnected', () => this._onDisconnected());
-      let server = await this.device.gatt.search();
+      let server = await this.device.gatt.connect();
       let service = await server.getPrimaryService(serviceUuid);
       this.characteristic = await service.getCharacteristic(characteristicUuid);
       await this.characteristic.startNotifications();

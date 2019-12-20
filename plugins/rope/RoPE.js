@@ -28,6 +28,10 @@ export default class RoPE {
     this.bluetooth.on('connection-failed', callback);
   }
 
+  isConnected() {
+    return this.bluetooth.isConnected()
+  }
+
   async execute() {
     await this.sendCommands('e')
   }

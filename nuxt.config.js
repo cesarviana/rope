@@ -1,3 +1,5 @@
+import path from 'path'
+import fs from 'fs'
 
 export default {
   mode: 'universal',
@@ -53,6 +55,10 @@ export default {
   },
 
   server: {
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'server.crt')),
+    },
     port: 8000,
     host: '0.0.0.0'
   }

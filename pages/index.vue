@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div>
-      <rope :slepping="ropeSleeping"/>
+      <rope :slepping="connectionFailed"/>
     </div>
     <hr>
     <div>
@@ -20,7 +20,7 @@
     },
     data(){
       return {
-        ropeSleeping: false
+        connectionFailed: false
       }
     },
     methods: {
@@ -29,7 +29,7 @@
           await this.$rope.search();
           this.$router.push('/programming')
         } catch (e) {
-          this.ropeSleeping = true;
+          this.connectionFailed = true;
           console.error(e)
         }
       }
