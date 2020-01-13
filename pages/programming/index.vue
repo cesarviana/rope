@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :class="{executing}">
     <div class="dragging">
       <draggable v-model="pieces"
                  id="pieces"
@@ -8,6 +8,7 @@
                  animation="150"
                  group="shared"
                  :onSpill="onSpill"
+                 :disabled="executing"
                  remove-on-spill="true"
       >
         <piece v-for="piece in pieces" :key="piece.id" :command="piece.command" :state="piece.state"></piece>
@@ -27,6 +28,7 @@
       </draggable>
       <start-button :disabled="noPieces" @click="execute"/>
     </div>
+    <div id="shadow"></div>
   </div>
 </template>
 
@@ -43,7 +45,7 @@
     RIGHT: 'right'
   };
 
-  let snapSound = undefined
+  let snapSound, startSound, stopSound = undefined
 
   export default {
     components: {
@@ -57,8 +59,43 @@
           {id: 2, command: commands.LEFT},
           {id: 3, command: commands.RIGHT}
         ],
-        pieces: [],
-        maxId: 3
+        pieces: [
+          {id: 0, command: commands.FORWARD},
+          {id: 1, command: commands.BACKWARD},
+          {id: 2, command: commands.LEFT},
+          {id: 3, command: commands.RIGHT},
+          {id: 10, command: commands.FORWARD},
+          {id: 11, command: commands.BACKWARD},
+          {id: 12, command: commands.LEFT},
+          {id: 13, command: commands.RIGHT},
+          {id: 222, command: commands.FORWARD},
+          {id: 21, command: commands.BACKWARD},
+          {id: 22, command: commands.LEFT},
+          {id: 23, command: commands.RIGHT},
+          {id: 20, command: commands.FORWARD},
+          {id: 31, command: commands.BACKWARD},
+          {id: 32, command: commands.LEFT},
+          {id: 33, command: commands.RIGHT},
+          
+          {id: 40, command: commands.FORWARD},
+          {id: 41, command: commands.BACKWARD},
+          {id: 42, command: commands.LEFT},
+          {id: 43, command: commands.RIGHT},
+          {id: 410, command: commands.FORWARD},
+          {id: 411, command: commands.BACKWARD},
+          {id: 412, command: commands.LEFT},
+          {id: 413, command: commands.RIGHT},
+          {id: 4222, command: commands.FORWARD},
+          {id: 421, command: commands.BACKWARD},
+          {id: 422, command: commands.LEFT},
+          {id: 423, command: commands.RIGHT},
+          {id: 420, command: commands.FORWARD},
+          {id: 431, command: commands.BACKWARD},
+          {id: 432, command: commands.LEFT},
+          {id: 433, command: commands.RIGHT}
+        ],
+        maxId: 3,
+        executing: false
       }
     },
     mounted() {
@@ -74,6 +111,8 @@
       this.$rope.onExecutionStarted(_=>{
         if(this.pieces[0]){
           this.pieces[0].state = 'highlighted'
+          this.executing = true
+          startSound.play()
           this.$forceUpdate()
         }
       })
@@ -86,10 +125,15 @@
           this.pieces[index+1].state = 'highlighted'
         }
         this.$forceUpdate()
+
+        this.scrollToCurrentPiece(index)
+
       })
       
       this.$rope.onExecutionStopped(_=>{
         this.pieces = []
+        this.executing = false
+        stopSound.play()
       })
 
       this.$rope.onAddedInstruction(command=>{
@@ -97,6 +141,8 @@
       })
 
       snapSound = new Audio('/sounds/snapsound.mp3')
+      startSound = new Audio('/sounds/startsound.wav')
+      stopSound = new Audio('/sounds/stopsound.wav')
     },
     methods: {
       goToFirstPage() {
@@ -124,6 +170,14 @@
       },
       execute() {
         this.$rope.execute(this.commands)
+      },
+      scrollToCurrentPiece(pieceIndex){
+        const highlightedPiece = document.getElementsByClassName('highlighted')[0]
+        const draggingArea = document.getElementsByClassName('dragging')[0]
+        const margin = 200
+        if( highlightedPiece.offsetLeft + margin > (window.innerWidth + draggingArea.scrollLeft) ) {
+          draggingArea.scrollTo( highlightedPiece.offsetLeft, 0)
+        }
       }
     },
     watch: {
@@ -215,5 +269,21 @@
     }
   }
 
+  .executing.container {
+    #shadow {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: #6d4b4b90;
+    }
+    .dragging {
+      scroll-behavior: smooth;
+      #pieces {
+        z-index: 2;
+        background-image: none;
+      }
+    }
+  }
+  
 
 </style>
