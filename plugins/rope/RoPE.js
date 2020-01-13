@@ -34,12 +34,30 @@ export default class RoPE {
     return this.bluetooth.isConnected()
   }
 
-  async execute() {
-    await this._sendBluetoothMessage('e')
+  async sendCommands(commands) {  
+    if(!commands || commands.length === 0) 
+    {
+      return this.clear()
+    }
+
+    const stringToSend = this._createCommandsString(commands)
+    this._sendBluetoothMessage(stringToSend)
+  }
+
+  async execute(commands) {
+    if(commands && commands.length > 0){
+      commands.push('execute')
+      const stringToSend = this._createCommandsString(commands)
+      await this._sendBluetoothMessage(stringToSend)
+    } else {
+      const stringToSend = this._createCommandsString(['execute'])
+      await this._sendBluetoothMessage(stringToSend)
+    }
   }
 
   async clear() {
-    await this._sendBluetoothMessage('c')
+    const stringToSend = this._createCommandsString(['clear'])
+    await this._sendBluetoothMessage(stringToSend)
   }
 
   _on(event, handler) {
@@ -91,6 +109,7 @@ export default class RoPE {
     if (this.eventHandlers[instruction]) {
       this.eventHandlers[instruction].forEach(eventHandler => {
         try {
+          alert(instruction + ' ' + parameter)
           eventHandler.call(this, parameter) 
         } catch (error) {
           alert(error)
@@ -99,26 +118,21 @@ export default class RoPE {
     }
   }
 
-  async sendCommands(commands) {  
-    if(!commands || commands.length === 0) 
-    {
-      return this.clear()
-    }
-
+  _createCommandsString(commands) {
+    const COMMANDS_PREFIX = 'cmds:';
     const SOUND_OFF = 's';
     const SOUND_ON = 's';
-    const CLEAR = 'c'
+    const CLEAR = 'c';
     
     const firstCharOfEachCommand = commands.map(command => command[0]);
     const commandChars = firstCharOfEachCommand.reduce((a, b) => a + b, '');
     const firstCommandChars = commandChars.length > 1 ? commandChars.substring(0, commandChars.length - 1) : ''
     const lastCommandChar = commandChars[commandChars.length - 1]
-    const stringToSend = CLEAR + SOUND_OFF + firstCommandChars + SOUND_ON + lastCommandChar
-    this._sendBluetoothMessage(stringToSend)
+    return COMMANDS_PREFIX + CLEAR + SOUND_OFF + firstCommandChars + SOUND_ON + lastCommandChar
   }
 
   async _sendBluetoothMessage(message) {
-    this.bluetooth.setCharacteristic(`cmds:${message}`)
+    this.bluetooth.setCharacteristic(message)
   }
 
 }

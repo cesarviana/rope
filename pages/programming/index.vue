@@ -25,7 +25,7 @@
       >
         <piece v-for="piece in availablePieces" :key="piece.id" :command="piece.command" />
       </draggable>
-      <start-button :disabled="noPieces"/>
+      <start-button :disabled="noPieces" @click="execute"/>
     </div>
   </div>
 </template>
@@ -42,6 +42,8 @@
     LEFT: 'left',
     RIGHT: 'right'
   };
+
+  let snapSound = undefined
 
   export default {
     components: {
@@ -89,6 +91,12 @@
       this.$rope.onExecutionStopped(_=>{
         this.pieces = []
       })
+
+      this.$rope.onAddedInstruction(_=>{
+        this.pieces.push()
+      })
+
+      snapSound = new Audio('/sounds/snapsound.mp3')
     },
     methods: {
       goToFirstPage() {
@@ -106,17 +114,40 @@
       },
       removePiece(pieceIndex) {
         this.pieces.splice(pieceIndex, 1)
+      },
+      execute() {
+        this.$rope.execute(this.commands)
       }
     },
     watch: {
-      pieces: function(val){
-        const commands = this.pieces.map(piece => piece.command)
-        this.$rope.sendCommands(commands)
+      pieces: function(newPieces, oldPieces){
+        
+        /**
+         * Send commands just to get feedback for the last command.
+         * That way, the child listen, from the robot, the sound of last command.
+         * 
+         * The complete list of commands is sent when "execute button" is pressed.
+         *  */ 
+        this.$rope.sendCommands([this.lastCommand])
+        
+        const pieceAddedOrMoved = newPieces.length >= oldPieces.length
+        if(pieceAddedOrMoved){
+          snapSound.play()
+        }
       }
     },
     computed: {
       noPieces(){
         return this.pieces.length == 0
+      },
+      commands() {
+        return this.pieces.map(piece => piece.command)
+      },
+      lastCommand() {
+        if(this.commands.length > 0) {
+          return this.commands[this.commands.length - 1]
+        }
+        return undefined
       }
     }
   }
@@ -143,15 +174,12 @@
       #pieces {
         margin: 0 auto;
         display: flex;
-        // border: 1px solid blue;
         min-height: $pieceWidth;
         min-width: $pieceWidth * 3.4;
-        // padding: 30px;
         background-image: url('/placeholder.svg');
         background-size: 80px 100%;
         background-repeat: repeat-x;
         background-position-y: center;
-        // background-color: red;
 
         div.piece {
           width: $pieceWidth;
@@ -167,15 +195,6 @@
     .piece:active {
       animation-name: rotate;
       animation-duration: .5s;
-    }
-
-    @keyframes rotate {
-      /*0% {*/
-      /*  transform: rotate(0deg);*/
-      /*}*/
-      /*25% {*/
-      /*  transform: rotate(10deg);*/
-      /*}*/
     }
 
     .available {

@@ -27,6 +27,9 @@
 </template>
 
 <script>
+
+  let errorSound = undefined
+
   export default {
     name: "StartButton",
     data() {
@@ -44,12 +47,15 @@
       this.$rope.onExecutionStopped(()=>{
         this.active = false
       })
+      errorSound = new Audio('/sounds/error.flac')
     },
     methods: {
       execute() {
         if(this.enabled){
           this.active = true
-          this.$rope.execute()
+          this.$emit('click')
+        } else {
+          errorSound.play()
         }
       }
     },
