@@ -1,4 +1,4 @@
 import Vue from 'vue'
-import RoPE from './RoPEFake'
+import RoPE from './RoPE'
 
 Vue.prototype.$rope = new RoPE();

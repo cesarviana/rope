@@ -35,11 +35,11 @@ export default class RoPE {
   }
 
   async execute() {
-    await this.sendCommands(['execute'])
+    await this._sendBluetoothMessage('e')
   }
 
   async clear() {
-    await this.sendCommands(['clear'])
+    await this._sendBluetoothMessage('c')
   }
 
   _on(event, handler) {
@@ -73,7 +73,6 @@ export default class RoPE {
 
   onAddedInstruction(handler) {
     this._on('addi', (parameter) => {
-      console.log('addi', parameter)
       handler.call(this, parameter)
     })
   }
@@ -90,55 +89,36 @@ export default class RoPE {
     const parameter = groups.parameter
 
     if (this.eventHandlers[instruction]) {
-      this.eventHandlers[instruction].forEach(eventHandler => eventHandler.call(this, parameter))
+      this.eventHandlers[instruction].forEach(eventHandler => {
+        try {
+          eventHandler.call(this, parameter) 
+        } catch (error) {
+          alert(error)
+        }
+      })
     }
-
-    // switch(instruction)
-    // {
-    //     case 'executed':
-    //         const nextIndex = Number(parameter) + 1
-    //         this.blocks.highlight({index: nextIndex})
-    //         break;
-    //     case 'program':
-    //         if(parameter === 'started'){
-    //             this.showShadow()
-    //             this.blocks.highlight({index: 0})
-    //         } else {
-    //             this.hideShadow()
-    //             this.blocks.hideHighlight()
-    //             this.blocks.clear()
-    //         }
-    //         break;
-    //     case 'addi':
-    //         if(this.commands.length && parameter === this.commands[0])
-    //         {
-    //             this.commands.shift()
-    //         } 
-    //         else 
-    //         {  
-    //             console.log('adicionando')
-    //             const commands = {
-    //                 f:'FORWARD', b:'BACKWARD', r:'RIGHT', l:'LEFT'
-    //             }
-    //             const command = commands[parameter]
-    //             this.blocks.addPieceFrom(command)
-    //         }
-    //     break;
-    // }
   }
 
-  async sendCommands(commands) {
-    const COMMANDS_PREFIX = 'cmds:';
-    const SOUND_OFF = 's';
-    const SOUND_ON = 'S';
+  async sendCommands(commands) {  
+    if(!commands || commands.length === 0) 
+    {
+      return this.clear()
+    }
 
+    const SOUND_OFF = 's';
+    const SOUND_ON = 's';
+    const CLEAR = 'c'
+    
     const firstCharOfEachCommand = commands.map(command => command[0]);
     const commandChars = firstCharOfEachCommand.reduce((a, b) => a + b, '');
-    const firsCommandChars = commandChars.length > 1 ? commandChars.substring(0, commandChars.length - 1) : ''
+    const firstCommandChars = commandChars.length > 1 ? commandChars.substring(0, commandChars.length - 1) : ''
     const lastCommandChar = commandChars[commandChars.length - 1]
-    const stringToSend = COMMANDS_PREFIX + SOUND_OFF + firsCommandChars + SOUND_ON + lastCommandChar
-    console.log('sending instructions...', stringToSend);
-    this.bluetooth.setCharacteristic(stringToSend)
+    const stringToSend = CLEAR + SOUND_OFF + firstCommandChars + SOUND_ON + lastCommandChar
+    this._sendBluetoothMessage(stringToSend)
+  }
+
+  async _sendBluetoothMessage(message) {
+    this.bluetooth.setCharacteristic(`cmds:${message}`)
   }
 
 }

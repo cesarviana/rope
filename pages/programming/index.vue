@@ -68,11 +68,13 @@
       this.$rope.onConnectionFailed(()=>{
         this.goToFirstPage()
       })
-      
+
       this.$rope.onExecutionStarted(_=>{
-        this.pieces[0].state = 'highlighted'
-        this.$forceUpdate()
-      }, this)
+        if(this.pieces[0]){
+          this.pieces[0].state = 'highlighted'
+          this.$forceUpdate()
+        }
+      })
       
       this.$rope.onExecutedInstruction(index=>{
         if(this.pieces[index]){
@@ -82,8 +84,11 @@
           this.pieces[index+1].state = 'highlighted'
         }
         this.$forceUpdate()
-      }, this)
+      })
       
+      this.$rope.onExecutionStopped(_=>{
+        this.pieces = []
+      })
     },
     methods: {
       goToFirstPage() {
