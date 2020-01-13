@@ -1,16 +1,19 @@
 <template>
   <div class="container">
     <div class="dragging">
-      <draggable id="pieces"
+      <draggable  v-model="pieces"
+                 id="pieces"
                  ghost-class="ghost"
                  easing="cubic-bezier(0.5, 0, 0, 1)"
                  animation="150"
                  group="shared"
                  remove-on-spill="true"
-                 v-model="pieces"
       >
-        <piece v-for="piece in pieces" :key="piece.id" :command="piece.command"></piece>
+        <piece v-for="piece in pieces" :key="piece.id" :command="piece.command" :state="piece.state"></piece>
       </draggable>
+    </div>
+    <div>
+      <span v-for="piece in pieces" :key="piece.id">{{piece.id}}, </span>
     </div>
     <div class="available">
       <rope/>
@@ -59,12 +62,30 @@
       }
     },
     mounted() {
+      
       if(!this.$rope.isConnected()){
         this.goToFirstPage()
       }
+      
       this.$rope.onConnectionFailed(()=>{
         this.goToFirstPage()
       })
+      
+      this.$rope.onExecutionStarted(_=>{
+        this.pieces[0].state = 'highlighted'
+        this.$forceUpdate()
+      }, this)
+      
+      this.$rope.onExecutedInstruction(index=>{
+        if(this.pieces[index]){
+          this.pieces[index].state = 'default'
+        }
+        if(this.pieces[index+1]){
+          this.pieces[index+1].state = 'highlighted'
+        }
+        this.$forceUpdate()
+      }, this)
+      
     },
     methods: {
       goToFirstPage() {

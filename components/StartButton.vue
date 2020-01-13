@@ -4,7 +4,7 @@
       viewBox="0 0 23.784723 23.010496"
       height="70"
       width="70"
-      @click="toggleActive"
+      @click="execute"
     >
       <g
         transform="translate(-220.68502,-315.73285)"
@@ -33,9 +33,15 @@
         active: false
       }
     },
+    mounted() {
+      this.$rope.onExecutionStopped(()=>{
+        this.active = false
+      })
+    },
     methods: {
-      toggleActive() {
-        this.active = !this.active
+      execute() {
+        this.active = true
+        this.$rope.execute()
       }
     }
   }

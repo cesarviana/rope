@@ -2,7 +2,7 @@ export default class RoPE {
   constructor() {
     this.onConnectedCallbacks = [];
     this.onConnectionFailedCallbacks = [];
-    this.onMessageCallbacks = [];
+    this.eventHandlers = {}
   }
 
   async search() {
@@ -19,10 +19,10 @@ export default class RoPE {
     });
   }
 
-  _notify(callbackArray, data) {
-    callbackArray.forEach(callback => {
-      callback.call(this, data)
-    })
+  _notify(event, param) {
+    this.eventHandlers[event].forEach((handler)=>{
+      handler.call(this,param) 
+    });
   }
 
   onConnected(callback) {
@@ -37,14 +37,41 @@ export default class RoPE {
     return Math.random() > 0.15
   }
 
-  onMessage(callback) {
-    this.onMessageCallbacks.push(callback)
+  _on(event, handler) {
+    if (this.eventHandlers[event] === undefined) {
+      this.eventHandlers[event] = []
+    }
+    this.eventHandlers[event].push(handler)
+  }
+
+  onExecutionStarted(handler, caller) {
+    this._on('program', function(parameter) {
+      if (parameter == 'started'){
+        handler.call(caller)
+      }
+    })
+  }
+
+  onExecutionStopped(handler, caller) {
+    this._on('program', function(parameter) {
+      if (parameter == 'terminated'){
+        handler.call(caller)
+      }
+    })
+  }
+
+  onExecutedInstruction(handler) {
+    this._on('executed', handler)
+  }
+
+  onAddedInstruction(handler) {
+    this._on('addi', function(parameter) {
+      handler.call(this, parameter)
+    })
   }
 
   sendCommands(commands) {
     this.commands = commands;
-    // const characteristic = this.compiler.compile(commands);
-    // console.log(characteristic)
     console.log('sending commands', JSON.stringify(commands))
   }
 
@@ -54,14 +81,18 @@ export default class RoPE {
   async execute() {
     this.sendCommands(this.commands);
 
-    this._notify(this.onMessageCallbacks, '<program:started>');
+    this._notify(`program`,`started`);
 
-    this.commands.forEach((command, index) => {
-      this._notify(this.onMessageCallbacks, `<executed:${index}>`)
+    let timeout = 1000
+
+    this.commands.forEach((_, index) => {
+      setTimeout(() => {
+        this._notify(`executed`,index);
+      }, timeout += 1000)
     });
 
     setTimeout(() => {
-      this._notify(this.onMessageCallbacks, `<program:terminated>`)
-    }, 1000)
+      this._notify(`program`,`terminated`);
+    }, 1000);
   }
 }

@@ -1,13 +1,6 @@
 <template>
   <div class="container">
-    <div>
-      <rope :slepping="connectionFailed"/>
-    </div>
-    <hr>
-    <div>
-      <hr>
-      <button @click="search">Conectar</button>
-    </div>
+    <rope @click.native="search" :state="ropeState"/>
   </div>
 </template>
 
@@ -20,17 +13,17 @@
     },
     data(){
       return {
-        connectionFailed: false
+        ropeState: 'sleeping'
       }
     },
     methods: {
       async search() {
+        this.ropeState = 'searching';
         try {
           await this.$rope.search();
           this.$router.push('/programming')
         } catch (e) {
-          this.connectionFailed = true;
-          console.error(e)
+          this.ropeState = 'sleeping';
         }
       }
     }
@@ -39,28 +32,16 @@
 
 <style scoped lang="scss">
 
-  $spacingDefault: 20px;
-  $pieceWidth: 78px;
+  $backgroundColor: #7eb3ae5d;
+  $buttonSize: 100px;
 
   .container {
     height: 100vh;
     display: flex;
     flex-flow: column;
-    justify-content: space-between;
     align-items: center;
-    background: #f2f2f2;
-
-    div {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    div:last-of-type {
-      width: 100%;
-      background: #f2f2f2;
-    }
+    justify-content: center;
+    background: $backgroundColor;
   }
 
 </style>
