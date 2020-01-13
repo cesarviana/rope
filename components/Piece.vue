@@ -1,5 +1,5 @@
 <template>
-  <div class="piece">
+  <div class="piece" :class="state">
     <svg
       width="105"
       height="83"
@@ -59,7 +59,7 @@
 
 <style lang="scss" scoped>
 
-  .piece:active {
+  .piece.highlighted {
     $overOtherPieces: 100;
     z-index: $overOtherPieces;
   }
@@ -71,11 +71,15 @@
   .piece-body:active {
     cursor: grabbing;
     filter: url(#selected-item);
-    transform: rotate(-1grad);
   }
 
   .piece-body {
     $highlightedColor: rgb(70, 255, 255);
+
+    path {
+      transition: stroke 0.5s, stroke-width 0.5s, z-index 0.5s;
+    }
+
     .border.default {
       stroke:#241c1c;
       stroke-width:0.7;
@@ -83,7 +87,7 @@
 
     .border.highlighted {
       stroke: $highlightedColor;
-      stroke-width:1;
+      stroke-width:1.5;
     }
 
     .arrow.default {
