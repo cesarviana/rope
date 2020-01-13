@@ -78,21 +78,24 @@ export default class RoPE {
   clear() {
   }
 
-  async execute() {
-    this.sendCommands(this.commands);
+  async execute(commands) {
+    this.sendCommands(commands);
 
     this._notify(`program`,`started`);
 
+    const commandExecutionTime = 1000
     let timeout = 1000
 
-    this.commands.forEach((_, index) => {
+    commands.forEach((_, index) => {
       setTimeout(() => {
         this._notify(`executed`,index);
-      }, timeout += 1000)
+      }, timeout += commandExecutionTime)
     });
 
+    const terminatedTimeout = commandExecutionTime * (commands.length + 1)
+    
     setTimeout(() => {
       this._notify(`program`,`terminated`);
-    }, 1000);
+    }, terminatedTimeout);
   }
 }
