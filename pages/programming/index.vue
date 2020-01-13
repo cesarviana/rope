@@ -25,7 +25,7 @@
       >
         <piece v-for="piece in availablePieces" :key="piece.id" :command="piece.command" />
       </draggable>
-      <start-button/>
+      <start-button :disabled="noPieces"/>
     </div>
   </div>
 </template>
@@ -112,6 +112,11 @@
       pieces: function(val){
         const commands = this.pieces.map(piece => piece.command)
         this.$rope.sendCommands(commands)
+      }
+    },
+    computed: {
+      noPieces(){
+        return this.pieces.length == 0
       }
     }
   }
