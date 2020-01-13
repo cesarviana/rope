@@ -1,19 +1,17 @@
 <template>
   <div class="container">
     <div class="dragging">
-      <draggable  v-model="pieces"
+      <draggable v-model="pieces"
                  id="pieces"
                  ghost-class="ghost"
                  easing="cubic-bezier(0.5, 0, 0, 1)"
                  animation="150"
                  group="shared"
+                 :onSpill="onSpill"
                  remove-on-spill="true"
       >
         <piece v-for="piece in pieces" :key="piece.id" :command="piece.command" :state="piece.state"></piece>
       </draggable>
-    </div>
-    <div>
-      <span v-for="piece in pieces" :key="piece.id">{{piece.id}}, </span>
     </div>
     <div class="available">
       <rope/>
@@ -96,6 +94,13 @@
           id: ++this.maxId,
           command: piece.command
         }
+      },
+      onSpill(event){
+        const pieceIndex = event.oldDraggableIndex
+        this.removePiece(pieceIndex)
+      },
+      removePiece(pieceIndex) {
+        this.pieces.splice(pieceIndex, 1)
       }
     },
     watch: {
