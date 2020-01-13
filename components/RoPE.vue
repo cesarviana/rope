@@ -267,9 +267,9 @@ export default {
     return {
       positioning: {
         awake: {
-          viewBox: '0 0 67.808961 69.225155',
-          height: 73,
-          width: 72,
+          viewBox: '0 0 70 72',
+          height: 61,
+          width: 80,
           transformRope: 'translate(0, -65)'
         },
         sleeping: {
