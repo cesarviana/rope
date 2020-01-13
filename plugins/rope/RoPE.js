@@ -91,7 +91,17 @@ export default class RoPE {
 
   onAddedInstruction(handler) {
     this._on('addi', (parameter) => {
-      handler.call(this, parameter)
+
+      const dictionary = {
+        f: 'forward',
+        b: 'backward',
+        l: 'left',
+        r: 'right'
+      }
+
+      const addedCommand = dictionary[parameter]
+
+      handler.call(this, addedCommand)
     })
   }
 
@@ -109,7 +119,6 @@ export default class RoPE {
     if (this.eventHandlers[instruction]) {
       this.eventHandlers[instruction].forEach(eventHandler => {
         try {
-          alert(instruction + ' ' + parameter)
           eventHandler.call(this, parameter) 
         } catch (error) {
           alert(error)
@@ -132,6 +141,7 @@ export default class RoPE {
   }
 
   async _sendBluetoothMessage(message) {
+    alert(message)
     this.bluetooth.setCharacteristic(message)
   }
 

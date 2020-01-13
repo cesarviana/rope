@@ -92,8 +92,8 @@
         this.pieces = []
       })
 
-      this.$rope.onAddedInstruction(_=>{
-        this.pieces.push()
+      this.$rope.onAddedInstruction(command=>{
+        this.addCommand(command)
       })
 
       snapSound = new Audio('/sounds/snapsound.mp3')
@@ -103,9 +103,12 @@
         this.$router.push('/?connectionFailed=true')
       },
       clone(piece) {
+        return this.newPieceFor(piece.command)
+      },
+      newPieceFor(command){
         return {
-          id: ++this.maxId,
-          command: piece.command
+          id: ++this.maxId, 
+          command
         }
       },
       onSpill(event){
@@ -114,6 +117,10 @@
       },
       removePiece(pieceIndex) {
         this.pieces.splice(pieceIndex, 1)
+      },
+      addCommand(command) {
+        const piece = this.newPieceFor(command)
+        this.pieces.push(piece)
       },
       execute() {
         this.$rope.execute(this.commands)
