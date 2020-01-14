@@ -92,7 +92,7 @@
         }
         this.$forceUpdate()
 
-        this.scrollToCurrentPiece(index)
+        this.scrollToCurrentPiece()
 
       })
       
@@ -103,7 +103,9 @@
       })
 
       this.$rope.onAddedInstruction(command=>{
-        this.addCommand(command)
+        const piece = this.newPieceFor(command)
+        piece.originatedInRoPE = true
+        this.pieces.push(piece)
       })
 
       snapSound = new Audio('/sounds/snapsound.mp3')
@@ -130,15 +132,14 @@
       removePiece(pieceIndex) {
         this.pieces.splice(pieceIndex, 1)
       },
-      addCommand(command) {
-        const piece = this.newPieceFor(command)
-        this.pieces.push(piece)
-      },
       execute() {
         this.$rope.execute(this.commands)
       },
-      scrollToCurrentPiece(pieceIndex){
+      scrollToCurrentPiece(){
         const highlightedPiece = document.getElementsByClassName('highlighted')[0]
+        
+        if(!highlightedPiece) return
+
         const draggingArea = document.getElementsByClassName('dragging')[0]
         const margin = 200
         if( highlightedPiece.offsetLeft + margin > (window.innerWidth + draggingArea.scrollLeft) ) {
@@ -149,13 +150,9 @@
     watch: {
       pieces: function(newPieces, oldPieces){
         
-        /**
-         * Send commands just to get feedback for the last command.
-         * That way, the child listen, from the robot, the sound of last command.
-         * 
-         * The complete list of commands is sent when "execute button" is pressed.
-         *  */ 
-        this.$rope.sendCommands([this.lastCommand])
+        if(this.hasPieces && !this.lastPiece.originatedInRoPE){
+          this.$rope.sendCommands(this.commands)
+        }
         
         const pieceAddedOrMoved = newPieces.length >= oldPieces.length
         if(pieceAddedOrMoved){
@@ -167,12 +164,15 @@
       noPieces(){
         return this.pieces.length == 0
       },
+      hasPieces(){
+        return !this.noPieces
+      },
       commands() {
         return this.pieces.map(piece => piece.command)
       },
-      lastCommand() {
-        if(this.commands.length > 0) {
-          return this.commands[this.commands.length - 1]
+      lastPiece() {
+        if(this.hasPieces) {
+          return this.pieces[this.pieces.length - 1]
         }
         return undefined
       }
