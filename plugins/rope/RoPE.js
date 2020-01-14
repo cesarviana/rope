@@ -141,7 +141,6 @@ export default class RoPE {
   }
 
   async _sendBluetoothMessage(message) {
-    alert(message)
     this.bluetooth.setCharacteristic(message)
   }
 

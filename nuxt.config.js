@@ -30,7 +30,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src:'~/plugins/rope/index.js', mode: 'client' }
+    { src: '~/plugins/rope/index.js', mode: 'client' }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -50,7 +50,7 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+    extend(config, ctx) {
     }
   },
 
@@ -61,5 +61,20 @@ export default {
     },
     port: 8000,
     host: '0.0.0.0'
+  },
+
+  pwa: {
+    manifest: {
+      start_url: '/',
+      lang: 'pt',
+      background_color: "#f2f2f2",
+      display: "fullscreen",
+      orientation: "landscape",
+      theme_color: "#e6c090"
+    },
+    meta: {
+      name: 'RoPE Blocks',
+      nativeUI: true
+    }
   }
 }
