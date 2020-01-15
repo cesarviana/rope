@@ -1,7 +1,7 @@
 {
   "name": "rope_blocks",
   "version": "1.0.0",
-  "description": "My fantastic Nuxt.js project",
+  "description": "App para programar o RoPE - Robô Programável Educacional",
   "author": "Cesar Viana",
   "private": true,
   "scripts": {

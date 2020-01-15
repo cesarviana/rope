@@ -69,7 +69,7 @@
         }
       },
       enabled() {
-        return !this.disabled
+        return !this.disabled && !this.active
       }
     }
   }

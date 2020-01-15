@@ -1,13 +1,15 @@
 import path from 'path'
 import fs from 'fs'
 
+const prettyName = 'RoPE Blocks'
+
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
   ** Headers of the page
   */
   head: {
-    title: process.env.npm_package_name || '',
+    title: prettyName,
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -73,8 +75,14 @@ export default {
       theme_color: "#e6c090"
     },
     meta: {
-      name: 'RoPE Blocks',
       nativeUI: true
+    },
+    workbox: {
+      cacheNames: {
+        prefix: process.env.npm_package_name,
+        suffix: process.env.npm_package_version
+      },
+      clientsClaim: true
     }
   }
 }
