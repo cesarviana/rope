@@ -130,7 +130,7 @@ export default class RoPE {
   _createCommandsString(commands) {
     const COMMANDS_PREFIX = 'cmds:';
     const SOUND_OFF = 's';
-    const SOUND_ON = 's';
+    const SOUND_ON = 'S';
     const CLEAR = 'c';
     
     const firstCharOfEachCommand = commands.map(command => command[0]);
