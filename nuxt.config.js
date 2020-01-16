@@ -90,10 +90,14 @@ export default {
     base: process.env.NODE_ENV === 'development' ? '/' : '/rope/'
   },
 
+  // build: {
+  //   publicPath: process.env.NODE_ENV === 'development' ? '/' : '/rope/'
+  // }
+
   build: {
     extend (config, ctx) {
       config.module.rules.push({
-        test: /\.(flac|mp3|wav?g)$/i,
+        test: /\.(flac|mp3|wav|mpe?g)$/i,
         loader: 'file-loader',
         options: {
           name: '[path][name].[ext]'
