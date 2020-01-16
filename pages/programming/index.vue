@@ -42,8 +42,6 @@
   import startSoundPath from '~/assets/startsound.wav'
   import stopSoundPath from '~/assets/stopsound.wav'
   
-  console.log(snapSoundPath)
-  
   const commands = {
     FORWARD: 'forward',
     BACKWARD: 'backward',
