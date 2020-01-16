@@ -67,7 +67,7 @@ export default {
 
   pwa: {
     manifest: {
-      start_url: 'https://cesarviana.gitlab.io/rope',
+      start_url: './',
       lang: 'pt',
       background_color: "#f2f2f2",
       display: "fullscreen",
@@ -87,6 +87,6 @@ export default {
   },
 
   router: {
-    base: '/rope/'
+    base: './'
   }
 }
