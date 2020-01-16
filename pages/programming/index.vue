@@ -85,6 +85,7 @@
           this.executing = true
           startSound.play()
           this.$forceUpdate()
+          this.$nextTick(this.scrollToCurrentPiece)
         }
       })
       
@@ -147,7 +148,9 @@
 
         const draggingArea = document.getElementsByClassName('dragging')[0]
         const margin = 200
-        if( highlightedPiece.offsetLeft + margin > (window.innerWidth + draggingArea.scrollLeft) ) {
+        const pieceIsRight = highlightedPiece.offsetLeft + margin > (window.innerWidth + draggingArea.scrollLeft)
+        const pieceIsLeft = highlightedPiece.offsetLeft < draggingArea.scrollLeft
+        if( pieceIsRight || pieceIsLeft ) {
           draggingArea.scrollTo( highlightedPiece.offsetLeft, 0)
         }
       }
