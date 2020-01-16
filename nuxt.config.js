@@ -84,5 +84,9 @@ export default {
       },
       clientsClaim: true
     }
+  },
+
+  router: {
+    base: '/rope/'
   }
 }
