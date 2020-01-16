@@ -67,7 +67,7 @@ export default {
 
   pwa: {
     manifest: {
-      start_url: './',
+      start_url: 'index.html',
       lang: 'pt',
       background_color: "#f2f2f2",
       display: "fullscreen",
@@ -86,7 +86,12 @@ export default {
     }
   },
 
-  router: {
-    base: './'
+  builder: {
+    extend (config, { isDev }) {
+      if (!isDev) {
+        config.output.publicPath = './_nuxt/'
+      }
+    }
   }
+
 }
