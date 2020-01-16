@@ -10,3 +10,7 @@ cache:
 pages:
   script:
     - yarn generate
+  artifacts:
+    paths:
+      - dist
+
