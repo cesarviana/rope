@@ -17,7 +17,7 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', href: '/rope.png' }
+      { rel: 'icon', href: '/icon.png' }
     ]
   },
   /*
@@ -71,7 +71,7 @@ export default {
     manifest: {
       name: prettyName,
       short_name: prettyName,
-      start_url: `${productionSubfolder}index.html`,
+      start_url: `${productionSubfolder}`,
       lang: 'pt',
       background_color: "#f2f2f2",
       display: "fullscreen",
