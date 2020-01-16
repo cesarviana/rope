@@ -15,7 +15,7 @@
       </draggable>
     </div>
     <div class="available">
-      <rope/>
+      <rope v-if="clicksOnRoPE < 10" @click.native="clicksOnRoPE++"/>
       <draggable
         v-model="availablePieces"
         :clone="clone"
@@ -65,7 +65,8 @@
         ],
         pieces: [],
         maxId: 3,
-        executing: false
+        executing: false,
+        clicksOnRoPE: 0
       }
     },
     mounted() {
