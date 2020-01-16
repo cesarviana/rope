@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 
 const prettyName = 'RoPE Blocks'
+const productionSubfolder = '/rope/'
 
 export default {
   mode: 'spa',
@@ -67,7 +68,9 @@ export default {
 
   pwa: {
     manifest: {
-      start_url: 'index.html',
+      name: prettyName,
+      short_name: prettyName,
+      start_url: `${productionSubfolder}index.html`,
       lang: 'pt',
       background_color: "#f2f2f2",
       display: "fullscreen",
@@ -87,12 +90,8 @@ export default {
   },
 
   router: {
-    base: process.env.NODE_ENV === 'development' ? '/' : '/rope/'
+    base: process.env.NODE_ENV === 'development' ? '/' : `${productionSubfolder}`
   },
-
-  // build: {
-  //   publicPath: process.env.NODE_ENV === 'development' ? '/' : '/rope/'
-  // }
 
   build: {
     extend (config, ctx) {
