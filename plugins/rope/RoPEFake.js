@@ -6,10 +6,10 @@ export default class RoPE {
   }
 
   async search() {
-    const timeout = (Math.random() * 2 + 3) * 1000;
+    const timeout = (Math.random() * 2 + 3) * 100;
     return new Promise((resolve, reject) => {
       setTimeout(_ => {
-        const connected = Math.random() > 0.5;
+        const connected = Math.random() > 0.1;
         if (connected) {
           resolve()
         } else {

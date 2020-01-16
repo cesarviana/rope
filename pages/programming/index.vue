@@ -38,6 +38,12 @@
   import startButton from '~/components/StartButton'
   import piece from '~/components/Piece'
 
+  import snapSoundPath from '~/assets/snapsound.mp3'
+  import startSoundPath from '~/assets/startsound.wav'
+  import stopSoundPath from '~/assets/stopsound.wav'
+  
+  console.log(snapSoundPath)
+  
   const commands = {
     FORWARD: 'forward',
     BACKWARD: 'backward',
@@ -107,10 +113,10 @@
         piece.originatedInRoPE = true
         this.pieces.push(piece)
       })
-
-      snapSound = new Audio('/sounds/snapsound.mp3')
-      startSound = new Audio('/sounds/startsound.wav')
-      stopSound = new Audio('/sounds/stopsound.wav')
+      
+      snapSound = new Audio(snapSoundPath)
+      startSound = new Audio(startSoundPath)
+      stopSound = new Audio(stopSoundPath)
     },
     methods: {
       goToFirstPage() {
@@ -203,7 +209,7 @@
         display: flex;
         min-height: $pieceWidth;
         min-width: $pieceWidth * 3.4;
-        background-image: url('/placeholder.svg');
+        background-image: url('~assets/placeholder.svg');
         background-size: 80px 100%;
         background-repeat: repeat-x;
         background-position-y: center;

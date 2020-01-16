@@ -28,6 +28,8 @@
 
 <script>
 
+  import errorSoundPath from '~/assets/error.flac'
+
   let errorSound = undefined
 
   export default {
@@ -47,7 +49,7 @@
       this.$rope.onExecutionStopped(()=>{
         this.active = false
       })
-      errorSound = new Audio('/sounds/error.flac')
+      errorSound = new Audio(errorSoundPath)
     },
     methods: {
       execute() {

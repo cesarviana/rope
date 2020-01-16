@@ -86,12 +86,19 @@ export default {
     }
   },
 
-  builder: {
-    extend (config, { isDev }) {
-      if (!isDev) {
-        config.output.publicPath = './_nuxt/'
-      }
+  router: {
+    base: process.env.NODE_ENV === 'development' ? '/' : '/rope/'
+  },
+
+  build: {
+    extend (config, ctx) {
+      config.module.rules.push({
+        test: /\.(flac|mp3|wav?g)$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]'
+        }
+      })
     }
   }
-
 }
