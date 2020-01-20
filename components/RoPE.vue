@@ -273,15 +273,15 @@ export default {
           transformRope: 'translate(0, -65)'
         },
         sleeping: {
-          viewBox: '0 0 116.85767 135.07482',
-          height: 144,
-          width: 124,
+          viewBox: '0 0 75 135',
+          height: 204,
+          width: 154,
           transformRope: ''
         },
         searching: {
-          viewBox: '0 0 116.85767 135.07482',
-          height: 144,
-          width: 124,
+          viewBox: '0 0 75 135',
+          height: 204,
+          width: 154,
           transformRope: ''
         }
       }
