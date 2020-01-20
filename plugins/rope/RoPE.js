@@ -45,6 +45,9 @@ export default class RoPE {
   }
 
   async execute(commands) {
+    
+    this._avoidToManyRequests()
+
     if(commands && commands.length > 0){
       commands.push('execute')
       const stringToSend = this._createCommandsString(commands)
@@ -53,6 +56,16 @@ export default class RoPE {
       const stringToSend = this._createCommandsString(['execute'])
       await this._sendBluetoothMessage(stringToSend)
     }
+  }
+
+  _avoidToManyRequests() {
+    if(this.executionCalledToRecently) {
+      throw 'To many clicks: try later!'
+    }
+    this.executionCalledToRecently = true
+    setTimeout(()=>{
+      this.executionCalledToRecently = false
+    }, 200)
   }
 
   async clear() {
@@ -137,7 +150,19 @@ export default class RoPE {
     const commandChars = firstCharOfEachCommand.reduce((a, b) => a + b, '');
     const firstCommandChars = commandChars.length > 1 ? commandChars.substring(0, commandChars.length - 1) : ''
     const lastCommandChar = commandChars[commandChars.length - 1]
-    return COMMANDS_PREFIX + CLEAR + SOUND_OFF + firstCommandChars + SOUND_ON + lastCommandChar
+    let stringToSend = COMMANDS_PREFIX + CLEAR + SOUND_OFF + firstCommandChars + SOUND_ON + lastCommandChar
+
+    if(stringToSend.length > this.bluetooth.CHUNK_SIZE){
+      const chunks = stringToSend.match(/.{1,20}/g);
+      stringToSend = chunks[0]
+      for(let i=1; i<chunks.length; i++){
+        stringToSend += COMMANDS_PREFIX + chunks[i]
+      }
+    }
+
+    console.log(stringToSend)
+
+    return stringToSend
   }
 
   async _sendBluetoothMessage(message) {

@@ -10,7 +10,7 @@ export default class RoPE {
     const timeout = (Math.random() * 2 + 3) * 100;
     return new Promise((resolve, reject) => {
       setTimeout(_ => {
-        this.connected = Math.random() > 0.9;
+        this.connected = Math.random() > 0.5;
         this.connected ? resolve() : reject()
       }, timeout)
     });

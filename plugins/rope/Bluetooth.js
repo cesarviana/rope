@@ -4,6 +4,7 @@ export default class Bluetooth {
     this.encoder = new TextEncoder();
     this.decoder = new TextDecoder('utf-8');
     this.characteristic = undefined;
+    this.CHUNK_SIZE = 20;
   }
 
   async search(options) {
@@ -50,10 +51,10 @@ export default class Bluetooth {
 
   async setCharacteristic(value) {
     const chunks = value.match(/.{1,20}/g);
-    await chunks.forEach(async chunk => {
-      this._log(`Tela diz - ${chunk}`);
+    chunks.forEach(async value => {
+      this._log(`Tela diz - ${value}`);
       try {
-        await this.characteristic.writeValue(this.encoder.encode(chunk))
+        await this.characteristic.writeValue(this.encoder.encode(value))
       } catch (error) {
         console.log(JSON.stringify(error))
       }

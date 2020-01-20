@@ -67,7 +67,8 @@
         pieces: [],
         maxId: 3,
         executing: false,
-        clicksOnRoPE: 0
+        clicksOnRoPE: 0,
+        sendCommandsTimeoutHandler: undefined
       }
     },
     mounted() {
@@ -154,13 +155,25 @@
         if( pieceIsRight || pieceIsLeft ) {
           draggingArea.scrollTo( highlightedPiece.offsetLeft, 0)
         }
+      },
+      sendCommandsAndWaitForChanges() {
+        if(this.waitingChanges) {
+          clearTimeout(this.sendCommandsTimeoutHandler)
+          this.sendCommandsTimeoutHandler = setTimeout(()=>{
+            this.waitingChanges = false
+            this.$rope.sendCommands(this.commands)
+          }, 1000)
+        } else {
+          this.$rope.sendCommands(this.commands)
+          this.waitingChanges = true
+        }
       }
     },
     watch: {
       pieces: function(newPieces, oldPieces){
         
         if(this.hasPieces && !this.lastPiece.originatedInRoPE){
-          this.$rope.sendCommands(this.commands)
+          this.sendCommandsAndWaitForChanges()
         }
         
         const pieceAddedOrMoved = newPieces.length >= oldPieces.length
