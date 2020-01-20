@@ -3,18 +3,15 @@ export default class RoPE {
     this.onConnectedCallbacks = [];
     this.onConnectionFailedCallbacks = [];
     this.eventHandlers = {}
+    this.connected = false
   }
 
   async search() {
     const timeout = (Math.random() * 2 + 3) * 100;
     return new Promise((resolve, reject) => {
       setTimeout(_ => {
-        const connected = Math.random() > 0.1;
-        if (connected) {
-          resolve()
-        } else {
-          reject()
-        }
+        this.connected = Math.random() > 0.9;
+        this.connected ? resolve() : reject()
       }, timeout)
     });
   }
@@ -34,7 +31,7 @@ export default class RoPE {
   }
 
   isConnected() {
-    return Math.random() > 0.15
+    return this.connected
   }
 
   _on(event, handler) {
