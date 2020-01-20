@@ -152,17 +152,20 @@ export default class RoPE {
     const lastCommandChar = commandChars[commandChars.length - 1]
     let stringToSend = COMMANDS_PREFIX + CLEAR + SOUND_OFF + firstCommandChars + SOUND_ON + lastCommandChar
 
-    if(stringToSend.length > this.bluetooth.CHUNK_SIZE){
-      const chunks = stringToSend.match(/.{1,20}/g);
-      stringToSend = chunks[0]
-      for(let i=1; i<chunks.length; i++){
-        stringToSend += COMMANDS_PREFIX + chunks[i]
-      }
-    }
-
-    console.log(stringToSend)
+    stringToSend = this._addCommandPrefixToChunks(stringToSend, COMMANDS_PREFIX);
 
     return stringToSend
+  }
+
+  _addCommandPrefixToChunks(stringToSend, COMMANDS_PREFIX) {
+    if (stringToSend.length > this.bluetooth.CHUNK_SIZE) {
+      const chunks = stringToSend.match(/.{1,20}/g);
+      stringToSend = chunks[0];
+      for (let i = 1; i < chunks.length; i++) {
+        stringToSend += COMMANDS_PREFIX + chunks[i];
+      }
+    }
+    return stringToSend;
   }
 
   async _sendBluetoothMessage(message) {
