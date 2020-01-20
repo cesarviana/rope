@@ -10,6 +10,7 @@
                  :onSpill="onSpill"
                  :disabled="executing"
                  remove-on-spill="true"
+                 :style="{ 'min-width': Math.max(3, pieces.length + 1) * 78 + 'px'}"
       >
         <piece v-for="piece in pieces" :key="piece.id" :command="piece.command" :state="piece.state"></piece>
       </draggable>
@@ -210,9 +211,9 @@
         margin: 0 auto;
         display: flex;
         min-height: $pieceWidth;
-        min-width: $pieceWidth * 3.4;
+        min-width: $pieceWidth * 4;
         background-image: url('~assets/placeholder.svg');
-        background-size: 80px 100%;
+        background-size: $pieceWidth;
         background-repeat: repeat-x;
         background-position-y: center;
 
