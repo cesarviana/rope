@@ -48,16 +48,15 @@ export default class Bluetooth {
     this._notify('connection-failed')
   }
 
-  setCharacteristic(value) {
+  async setCharacteristic(value) {
     const chunks = value.match(/.{1,20}/g);
-    chunks.forEach(chunk => {
+    await chunks.forEach(async chunk => {
       this._log(`Tela diz - ${chunk}`);
-      this.characteristic.writeValue(this.encoder.encode(chunk))
-        .then(_ => {
-        })
-        .catch(error => {
-          console.log(JSON.stringify(error))
-        })
+      try {
+        await this.characteristic.writeValue(this.encoder.encode(chunk))
+      } catch (error) {
+        console.log(JSON.stringify(error))
+      }
     })
   }
 
