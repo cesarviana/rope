@@ -110,10 +110,10 @@
   }
 
   .left {
-    fill: #ff685e;
+    fill: #ffe46b;
   }
 
   .right {
-    fill: #ffe46b;
+    fill: #ff685e;
   }
 </style>
