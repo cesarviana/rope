@@ -4,12 +4,16 @@
  */
 import Bluetooth from "./Bluetooth.js";
 
+const BUSY = 1, SLEEPING = 0
+
 export default class RoPE {
 
   constructor() {
     this.bluetooth = new Bluetooth();
     this.eventHandlers = {}
     this.bluetooth.on('characteristic-changed', (message) => { this._onBluetoothMessage(message) })
+    this.state = SLEEPING
+    this.onExecutionStopped(_=> this.state = SLEEPING )
   }
 
   async search() {
@@ -35,6 +39,10 @@ export default class RoPE {
   }
 
   async sendCommands(commands) {  
+    if(this.state == BUSY){
+      return
+    }
+    
     if(!commands || commands.length === 0) 
     {
       return this.clear()
@@ -45,27 +53,20 @@ export default class RoPE {
   }
 
   async execute(commands) {
+    if(this.state == BUSY)
+      return
     
-    this._avoidToManyRequests()
-
+    this.state = BUSY
+    
     if(commands && commands.length > 0){
-      commands.push('execute')
-      const stringToSend = this._createCommandsString(commands)
+      const commandsCopy = [...commands]
+      commandsCopy.push('execute')
+      const stringToSend = this._createCommandsString(commandsCopy)
       await this._sendBluetoothMessage(stringToSend)
     } else {
       const stringToSend = this._createCommandsString(['execute'])
       await this._sendBluetoothMessage(stringToSend)
     }
-  }
-
-  _avoidToManyRequests() {
-    if(this.executionCalledToRecently) {
-      throw 'To many clicks: try later!'
-    }
-    this.executionCalledToRecently = true
-    setTimeout(()=>{
-      this.executionCalledToRecently = false
-    }, 200)
   }
 
   async clear() {
@@ -145,27 +146,15 @@ export default class RoPE {
     const SOUND_OFF = 's';
     const SOUND_ON = 'S';
     const CLEAR = 'c';
+    const MESSAGE_FINALIZER = '\n'
     
     const firstCharOfEachCommand = commands.map(command => command[0]);
     const commandChars = firstCharOfEachCommand.reduce((a, b) => a + b, '');
     const firstCommandChars = commandChars.length > 1 ? commandChars.substring(0, commandChars.length - 1) : ''
     const lastCommandChar = commandChars[commandChars.length - 1]
-    let stringToSend = COMMANDS_PREFIX + CLEAR + SOUND_OFF + firstCommandChars + SOUND_ON + lastCommandChar
-
-    stringToSend = this._addCommandPrefixToChunks(stringToSend, COMMANDS_PREFIX);
+    let stringToSend = COMMANDS_PREFIX + CLEAR + SOUND_OFF + firstCommandChars + SOUND_ON + lastCommandChar + MESSAGE_FINALIZER
 
     return stringToSend
-  }
-
-  _addCommandPrefixToChunks(stringToSend, COMMANDS_PREFIX) {
-    if (stringToSend.length > this.bluetooth.CHUNK_SIZE) {
-      const chunks = stringToSend.match(/.{1,20}/g);
-      stringToSend = chunks[0];
-      for (let i = 1; i < chunks.length; i++) {
-        stringToSend += COMMANDS_PREFIX + chunks[i];
-      }
-    }
-    return stringToSend;
   }
 
   async _sendBluetoothMessage(message) {

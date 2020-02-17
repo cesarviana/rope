@@ -53,11 +53,11 @@
     },
     methods: {
       execute() {
-        if(this.enabled){
+        if(this.disabled || this.active){
+          errorSound.play()
+        } else {
           this.active = true
           this.$emit('click')
-        } else {
-          errorSound.play()
         }
       }
     },
@@ -69,9 +69,6 @@
         if(this.active){
           return 'active'
         }
-      },
-      enabled() {
-        return !this.disabled && !this.active
       }
     }
   }

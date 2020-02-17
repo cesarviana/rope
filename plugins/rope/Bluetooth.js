@@ -34,7 +34,7 @@ export default class Bluetooth {
 
   _characteristicChanged(event) {
     const value = this.decoder.decode(event.target.value).trim();
-    this._log(`RoPE diz - ${value}`);
+    // this._log(`RoPE diz - ${value}`);
     this._notify('characteristic-changed', value)
   }
 
@@ -52,11 +52,11 @@ export default class Bluetooth {
   async setCharacteristic(value) {
     const chunks = value.match(/.{1,20}/g);
     chunks.forEach(async value => {
-      this._log(`Tela diz - ${value}`);
+      this._log(`Tela diz - ${value}, ${value.length}`);
       try {
         await this.characteristic.writeValue(this.encoder.encode(value))
-      } catch (error) {
-        console.log(JSON.stringify(error))
+      } catch (e) {
+        console.log(JSON.stringify(e))
       }
     })
   }
